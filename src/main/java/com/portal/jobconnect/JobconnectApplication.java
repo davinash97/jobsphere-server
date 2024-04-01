@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -61,7 +62,7 @@ public class JobconnectApplication {
 	// for Employer
 
 	// Name
-	@GetMapping(DEFAULT_EMPLOYER_URI + "/name/set")
+	@PostMapping(DEFAULT_EMPLOYER_URI + "/name/set")
 	public String setEmployerName(@RequestParam(required = true) String name) {
 		try {
 			if (name.isBlank() || name.isEmpty()) {
@@ -83,7 +84,7 @@ public class JobconnectApplication {
 	}
 
 	// Company
-	@GetMapping(DEFAULT_EMPLOYER_URI + "/company/set")
+	@PostMapping(DEFAULT_EMPLOYER_URI + "/company/set")
 	public String setEmployerCompany(@RequestParam(required = true) String company) {
 		try {
 			if (company.isBlank() || company.isEmpty()) {
@@ -107,7 +108,7 @@ public class JobconnectApplication {
 	// For Employees
 
 	// Name
-	@GetMapping(DEFAULT_EMPLOYEE_URI + "/name/set")
+	@PostMapping(DEFAULT_EMPLOYEE_URI + "/name/set")
 	public String setEmployeeName(@RequestParam(required = true) String name) {
 		try {
 			if (name.isBlank() || name.isEmpty()) {
@@ -129,7 +130,7 @@ public class JobconnectApplication {
 	}
 
 	// Expertise
-	@GetMapping(DEFAULT_EMPLOYEE_URI + "/expertise/set")
+	@PostMapping(DEFAULT_EMPLOYEE_URI + "/expertise/set")
 	public String setEmployeeExpertise(@RequestParam(required = true) String expertise) {
 		try {
 			if (expertise.isBlank() || expertise.isEmpty()) {
@@ -151,7 +152,7 @@ public class JobconnectApplication {
 	}
 
 	// Experience
-	@GetMapping(DEFAULT_EMPLOYEE_URI + "/experience/set")
+	@PostMapping(DEFAULT_EMPLOYEE_URI + "/experience/set")
 	public String setEmployeeExperience(@RequestParam(required = true) String expertise) {
 		try {
 			if (expertise.isBlank() || expertise.isEmpty()) {
