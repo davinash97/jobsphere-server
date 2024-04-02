@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ResponseObject {
     public int code;
-    public String result;
+    public Object result;
 
     public ResponseObject() {};
-    public ResponseObject(int code, String result) {
+    public ResponseObject(int code, Object result) {
         this.code = code;
         this.result = result;
     }
@@ -21,11 +21,11 @@ public class ResponseObject {
         return this.code;
     }
     
-    public void setResult(String result) {
+    public void setResult(Object result) {
         this.result = result;
     }
 
-    public String getResult() {
+    public Object getResult() {
         return this.result;
     }
 }

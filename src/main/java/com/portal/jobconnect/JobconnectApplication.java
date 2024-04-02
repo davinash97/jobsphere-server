@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.portal.jobconnect.UserAccounts.Employer.Employer;
+import com.portal.jobconnect.utils.ResponseObject;
 import com.portal.jobconnect.UserAccounts.Employee.Employee;
 
 @RestController
@@ -33,10 +35,12 @@ public class JobconnectApplication {
 	// Initializing the Employer & Employee Class
 	private final Employer employer;
 	private final Employee employee;
+	private ResponseObject response;
 
-	public JobconnectApplication(Employer employer, Employee employee) {
+	public JobconnectApplication(Employer employer, Employee employee, ResponseObject response) {
 		this.employer = employer;
 		this.employee = employee;
+		this.response = response;
 	}
 
 	public static void main(String[] args) {
@@ -225,39 +229,53 @@ public class JobconnectApplication {
 
 	// Posts
 	@PostMapping(DEFAULT_EMPLOYER_URI + "/post/create")
-	public ResponseEntity<String> employerCreatePost(
+	public ResponseEntity<ResponseObject> employerCreatePost(
 			@RequestParam(required = true) String title,
 			@RequestParam(required = true) String description,
 			@RequestParam(required = true) String location) {
-		UUID uuid = UUID.randomUUID();
-		employer.createPost(uuid.toString(), title, description, location);
-		return ResponseEntity.ok("Success");
+		try {
+			UUID uuid = UUID.randomUUID();
+			response = new ResponseObject(HttpStatus.OK.value(),
+					employer.createPost(uuid.toString(), title, description, location));
+		} catch (Exception e) {
+			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
+		}
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping(DEFAULT_EMPLOYER_URI + "/post/read")
-	public ResponseEntity<String> employerReadPost(String employerId) {
-		String result = employer.readPost(employerId);
-		System.out.println(result);
-		return ResponseEntity.ok(result);
+	public ResponseEntity<ResponseObject> employerReadPost(String employerId) {
+		try {
+			response = new ResponseObject(HttpStatus.OK.value(), employer.readPost(employerId));
+		} catch (Exception e) {
+			response = new ResponseObject(HttpStatus.OK.value(),
+					"Error:\t" + e.getMessage());
+		}
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping(DEFAULT_EMPLOYER_URI + "/post/update")
-	public ResponseEntity<String> employerUpdatePost(
+	public ResponseEntity<ResponseObject> employerUpdatePost(
 			@RequestParam(required = true) String employerId,
 			@DefaultValue(value = "") String title,
 			@DefaultValue(value = "") String description,
 			@DefaultValue(value = "") String location) {
-		employer.updatePost(employerId, title, description, location);
-		return ResponseEntity.ok("Success");
+		try {
+			response = new ResponseObject(HttpStatus.OK.value(),
+					employer.updatePost(employerId, title, description, location));
+		} catch (Exception e) {
+			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
+		}
+		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping(DEFAULT_EMPLOYER_URI + "/post/delete")
-	public ResponseEntity<String> employerDeletePost(@RequestParam(required = true) String employerId) {
-		try{
-			employer.deletePost(employerId);
+	public ResponseEntity<ResponseObject> employerDeletePost(@RequestParam(required = true) String employerId) {
+		try {
+			response = new ResponseObject(HttpStatus.OK.value(), employer.deletePost(employerId));
 		} catch (Exception e) {
-			return ResponseEntity.ok(e.getMessage());
+			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
 		}
-		return ResponseEntity.ok("Success");
+		return ResponseEntity.ok(response);
 	}
 }
