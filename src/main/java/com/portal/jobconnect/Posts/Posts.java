@@ -1,4 +1,4 @@
-package com.portal.jobconnect.Posts;
+package com.portal.jobconnect.posts;
 
 import org.springframework.stereotype.Component;
 
@@ -8,9 +8,10 @@ public class Posts {
     private String location;
     private String description;
 
-    public Posts(){};
-    
-    public Posts(String title, String description, String location){
+    public Posts() {
+    };
+
+    public Posts(String title, String description, String location) {
         this.title = title;
         this.location = location;
         this.description = description;

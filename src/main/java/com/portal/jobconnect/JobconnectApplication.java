@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpStatus;
@@ -20,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.portal.jobconnect.UserAccounts.Employer.Employer;
+import com.portal.jobconnect.profile.employee.Employee;
+import com.portal.jobconnect.profile.employer.Employer;
 import com.portal.jobconnect.utils.ResponseObject;
-import com.portal.jobconnect.UserAccounts.Employee.Employee;
 
 @RestController
 @SpringBootApplication
@@ -257,12 +256,17 @@ public class JobconnectApplication {
 	@PutMapping(DEFAULT_EMPLOYER_URI + "/post/update")
 	public ResponseEntity<ResponseObject> employerUpdatePost(
 			@RequestParam(required = true) String employerId,
-			@DefaultValue(value = "") String title,
-			@DefaultValue(value = "") String description,
-			@DefaultValue(value = "") String location) {
+			@RequestParam(required = false) String title,
+			@RequestParam(required = false) String description,
+			@RequestParam(required = false) String location) {
+
 		try {
+			if (title == null && description == null && location == null) {
+				return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.value(), "At least one of title, description, or location must be provided."));
+			}
 			response = new ResponseObject(HttpStatus.OK.value(),
 					employer.updatePost(employerId, title, description, location));
+
 		} catch (Exception e) {
 			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
 		}
