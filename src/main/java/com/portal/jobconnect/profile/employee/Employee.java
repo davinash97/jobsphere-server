@@ -8,8 +8,9 @@ public class Employee {
 	private String expertise;
 	private int experience;
 
-	public void setName(String name) {
+	public String setName(String name) {
 		this.name = name;
+		return this.name;
 	}
 
 	public String getName() {

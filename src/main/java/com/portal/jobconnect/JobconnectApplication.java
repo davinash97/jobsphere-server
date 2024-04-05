@@ -19,13 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.portal.jobconnect.components.Profile;
+import com.portal.jobconnect.components.ResponseObject;
+import com.portal.jobconnect.posts.Posts;
 import com.portal.jobconnect.profile.employee.Employee;
 import com.portal.jobconnect.profile.employer.Employer;
-import com.portal.jobconnect.utils.ResponseObject;
 
 @RestController
 @SpringBootApplication
-public class JobconnectApplication {
+public class JobconnectApplication<T> {
 
 	private final String DEFAULT_URI = "/v1";
 	private final String DEFAULT_EMPLOYER_URI = DEFAULT_URI + "/employer";
@@ -33,13 +35,15 @@ public class JobconnectApplication {
 
 	// Initializing the Employer & Employee Class
 	private final Employer employer;
-	private final Employee employee;
-	private ResponseObject response;
+	public final Employee employee;
+	private ResponseObject<?> response;
+	private final Profile profile;
 
-	public JobconnectApplication(Employer employer, Employee employee, ResponseObject response) {
+	public JobconnectApplication(Employer employer, Employee employee, ResponseObject<?> response, Profile profile) {
 		this.employer = employer;
 		this.employee = employee;
 		this.response = response;
+		this.profile = profile;
 	}
 
 	public static void main(String[] args) {
@@ -78,208 +82,142 @@ public class JobconnectApplication {
 		return "0.0.1";
 	}
 
-	// for Employer
-
+	// Account Creation
+	// Employer
 	@PostMapping(DEFAULT_EMPLOYER_URI + "/create")
-	public String createEmployee(@RequestParam(required = true) String name,
-			@RequestParam(required = true) String company) {
+	public ResponseEntity<ResponseObject<?>> createProfileEmployers(String accountType,
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String organizationName) {
 		try {
-			if (name.isBlank() || name.isEmpty() || company.isEmpty() || company.isBlank()) {
-				return "name & company needs arguments";
-			} else {
-				employer.setName(name);
-				employer.setCompany(company);
-				return "Success";
+			if (accountType.isEmpty() || name.isEmpty() || organizationName.isEmpty()) {
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "can't be empty");
+				return ResponseEntity.badRequest().body(response);
 			}
-		} catch (IllegalArgumentException e) {
-			return "Some Error Occured, we'll get back to you!" + e.getMessage();
+			if (accountType.toLowerCase().equals("employer")) {
+				UUID uuid = UUID.randomUUID();
+				employer.createProfile(uuid.toString(), accountType, name, organizationName);
+			} else {
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
+						accountType + " account type not supported");
+				return ResponseEntity.badRequest().body(response);
+			}
+			response = new ResponseObject<Profile>(HttpStatus.OK.value(), "ok", profile);
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			return "An unexpected error occured: " + e.getMessage();
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"Some Error Occured");
+			System.out.println("Error occured at " + e.getMessage());
+			return ResponseEntity.badRequest().body(response);
 		}
 	}
 
-	@GetMapping(DEFAULT_EMPLOYER_URI + "/read")
-	public String readEmployee(@RequestParam(required = true) String name) {
-		try {
-			if (name.isBlank() || name.isEmpty()) {
-				return "name & company needs arguments";
-			} else {
-				// employer.getCompany(name);
-				return "Success";
-			}
-		} catch (IllegalArgumentException e) {
-			return "Some Error Occured, we'll get back to you!" + e.getMessage();
-		} catch (Exception e) {
-			return "An unexpected error occured: " + e.getMessage();
-		}
-	}
-
-	// Name
-	// @PostMapping(DEFAULT_EMPLOYER_URI + "/name/set")
-	// public String setEmployerName(@RequestParam(required = true) String name) {
-	// try {
-	// if (name.isBlank() || name.isEmpty()) {
-	// return "Name cannot be Empty";
-	// } else {
-	// employer.setName(name);
-	// return "Success";
+	// Employee
+	// @PostMapping(DEFAULT_EMPLOYEE_URI + "/create")
+	// public ResponseEntity<ResponseObject<?>> createProfileEmployers(String accountType,
+	// 		@RequestParam(required = false) String name,
+	// 		@RequestParam(required = false) int age,
+	// 		@RequestParam(required = false) String expertise,
+	// 		@RequestParam(required = false) int experience) {
+	// 	try {
+	// 		if (accountType.isEmpty() || name.isEmpty() || expertise.isEmpty()) {
+	// 			response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "can't be empty");
+	// 			return ResponseEntity.badRequest().body(response);
+	// 		}
+	// 		if (accountType.toLowerCase().equals("employee")) {
+	// 			profile = new Profile(accountType, name, age, expertise, experience);
+	// 		} else {
+	// 			response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
+	// 					accountType + " account type not supported");
+	// 			return ResponseEntity.badRequest().body(response);
+	// 		}
+	// 		response = new ResponseObject<Profile>(HttpStatus.OK.value(), "ok", profile);
+	// 		return ResponseEntity.ok(response);
+	// 	} catch (Exception e) {
+	// 		response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+	// 				"Some Error Occured");
+	// 		System.out.println("Error occured at " + e.getMessage());
+	// 		return ResponseEntity.badRequest().body(response);
+	// 	}
 	// }
-	// } catch (IllegalArgumentException e) {
-	// return "Some Error Occured, we'll get back to you!" + e.getMessage();
-	// } catch (Exception e) {
-	// return "An unexpected error occured: " + e.getMessage();
-	// }
-	// }
-
-	// @GetMapping(DEFAULT_EMPLOYER_URI + "/name/get")
-	// public String getEmployerName() {
-	// return employer.getName();
-	// }
-
-	// Company
-	@PostMapping(DEFAULT_EMPLOYER_URI + "/company/set")
-	public String setEmployerCompany(@RequestParam(required = true) String company) {
-		try {
-			if (company.isBlank() || company.isEmpty()) {
-				return "This field cannot be empty";
-			} else {
-				employer.setCompany(company);
-				return "Success";
-			}
-		} catch (IllegalArgumentException e) {
-			return "Some Error Occured, we'll get back to you!" + e.getMessage();
-		} catch (Exception e) {
-			return "An unexpected error occured: " + e.getMessage();
-		}
-	}
-
-	@GetMapping(DEFAULT_EMPLOYER_URI + "/company/get")
-	public String getEmployerCompany() {
-		return employer.getName();
-	}
-
-	// For Employees
-
-	// Name
-	@PostMapping(DEFAULT_EMPLOYEE_URI + "/name/set")
-	public String setEmployeeName(@RequestParam(required = true) String name) {
-		try {
-			if (name.isBlank() || name.isEmpty()) {
-				return "Name cannot be Empty";
-			} else {
-				employee.setName(name);
-				return "Success";
-			}
-		} catch (IllegalArgumentException e) {
-			return "Some Error Occured, we'll get back to you!" + e.getMessage();
-		} catch (Exception e) {
-			return "An unexpected error occured: " + e.getMessage();
-		}
-	}
-
-	@GetMapping(DEFAULT_EMPLOYEE_URI + "/name/get")
-	public String getEmployeeName() {
-		return employee.getName();
-	}
-
-	// Expertise
-	@PostMapping(DEFAULT_EMPLOYEE_URI + "/expertise/set")
-	public String setEmployeeExpertise(@RequestParam(required = true) String expertise) {
-		try {
-			if (expertise.isBlank() || expertise.isEmpty()) {
-				return "This field cannot be empty";
-			} else {
-				employee.setExpertise(expertise);
-				return "Success";
-			}
-		} catch (IllegalArgumentException e) {
-			return "Some Error Occured, we'll get back to you!" + e.getMessage();
-		} catch (Exception e) {
-			return "An unexpected error occured: " + e.getMessage();
-		}
-	}
-
-	@GetMapping(DEFAULT_EMPLOYEE_URI + "/expertise/get")
-	public String getEmployeeExpertise() {
-		return employee.getExpertise();
-	}
-
-	// Experience
-	@PostMapping(DEFAULT_EMPLOYEE_URI + "/experience/set")
-	public String setEmployeeExperience(@RequestParam(required = true) String expertise) {
-		try {
-			if (expertise.isBlank() || expertise.isEmpty()) {
-				return "This field cannot be empty";
-			} else {
-				employee.setExperience(Integer.parseInt(expertise));
-				return "Success";
-			}
-		} catch (IllegalArgumentException e) {
-			return "Some Error Occured, we'll get back to you!" + e.getMessage();
-		} catch (Exception e) {
-			return "An unexpected error occured: " + e.getMessage();
-		}
-	}
-
-	@GetMapping(DEFAULT_EMPLOYEE_URI + "/experience/get")
-	public String getEmployeeExperience() {
-		return Integer.toString(employee.getExperience());
-	}
 
 	// Posts
 	@PostMapping(DEFAULT_EMPLOYER_URI + "/post/create")
-	public ResponseEntity<ResponseObject> employerCreatePost(
-			@RequestParam(required = true) String title,
-			@RequestParam(required = true) String description,
-			@RequestParam(required = true) String location) {
+	public ResponseEntity<ResponseObject<?>> employerCreatePost(
+			@RequestParam String title,
+			@RequestParam String description,
+			@RequestParam String location) {
 		try {
+			if (title.isEmpty() || description.isEmpty() || location.isEmpty()) {
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "Bad Request");
+				return ResponseEntity.ok(response);
+			}
+
 			UUID uuid = UUID.randomUUID();
-			response = new ResponseObject(HttpStatus.OK.value(),
+
+			response = new ResponseObject<Posts>(HttpStatus.OK.value(), "ok",
 					employer.createPost(uuid.toString(), title, description, location));
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"Error:\t" + e.getMessage());
+			return ResponseEntity.badRequest().body(response);
 		}
-		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping(DEFAULT_EMPLOYER_URI + "/post/read")
-	public ResponseEntity<ResponseObject> employerReadPost(String employerId) {
+	public ResponseEntity<ResponseObject<?>> employerReadPost(String employerId) {
 		try {
-			response = new ResponseObject(HttpStatus.OK.value(), employer.readPost(employerId));
+			if (employerId.length() != 36) {
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
+				return ResponseEntity.badRequest().body(response);
+			}
+			Posts result = employer.readPost(employerId);
+			response = (result == null)
+					? new ResponseObject<Posts>(HttpStatus.BAD_REQUEST.value(), "bad", result)
+					: new ResponseObject<Posts>(HttpStatus.OK.value(), "ok", result);
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject(HttpStatus.OK.value(),
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
 					"Error:\t" + e.getMessage());
+			return ResponseEntity.badRequest().body(response);
 		}
-		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping(DEFAULT_EMPLOYER_URI + "/post/update")
-	public ResponseEntity<ResponseObject> employerUpdatePost(
-			@RequestParam(required = true) String employerId,
+	public ResponseEntity<ResponseObject<?>> employerUpdatePost(
+			@RequestParam String employerId,
 			@RequestParam(required = false) String title,
 			@RequestParam(required = false) String description,
 			@RequestParam(required = false) String location) {
 
 		try {
 			if (title == null && description == null && location == null) {
-				return ResponseEntity.badRequest().body(new ResponseObject(HttpStatus.BAD_REQUEST.value(), "At least one of title, description, or location must be provided."));
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
+						"At least one of title, description, or location must be provided.");
+				return ResponseEntity.badRequest().body(response);
 			}
-			response = new ResponseObject(HttpStatus.OK.value(),
-					employer.updatePost(employerId, title, description, location));
+			Posts result = employer.updatePost(employerId, title, description, location);
+			response = (result == null)
+					? new ResponseObject<Posts>(HttpStatus.BAD_REQUEST.value(), "bad", result)
+					: new ResponseObject<Posts>(HttpStatus.OK.value(), "ok", result);
 
 		} catch (Exception e) {
-			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
+					"Error:\t" + e.getMessage());
 		}
 		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping(DEFAULT_EMPLOYER_URI + "/post/delete")
-	public ResponseEntity<ResponseObject> employerDeletePost(@RequestParam(required = true) String employerId) {
+	public ResponseEntity<ResponseObject<?>> employerDeletePost(@RequestParam String employerId) {
 		try {
-			response = new ResponseObject(HttpStatus.OK.value(), employer.deletePost(employerId));
+			response = new ResponseObject<Posts>(HttpStatus.OK.value(), "ok",
+					employer.deletePost(employerId));
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error:\t" + e.getMessage());
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"Error:\t" + e.getMessage());
+			return ResponseEntity.badRequest().body(response);
 		}
-		return ResponseEntity.ok(response);
 	}
 }

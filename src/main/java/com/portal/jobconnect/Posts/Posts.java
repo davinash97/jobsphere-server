@@ -4,14 +4,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Posts {
-    private String title;
-    private String location;
-    private String description;
+    public String _id;
+    public String title;
+    public String location;
+    public String description;
 
     public Posts() {
     };
 
-    public Posts(String title, String description, String location) {
+    public Posts(String _id, String description) {
+        this._id = _id;
+        this.description = description;
+    }
+
+    public Posts(String _id, String title, String description, String location) {
+        this._id = _id;
         this.title = title;
         this.location = location;
         this.description = description;
