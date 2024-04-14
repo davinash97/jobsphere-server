@@ -2,6 +2,8 @@ package com.portal.jobconnect;
 
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,7 +39,11 @@ public class JobconnectApplication<T> {
 	private final Employer employer;
 	public final Employee employee;
 	private ResponseObject<?> response;
+
+	@SuppressWarnings("unused")
 	private final Profile profile;
+
+	private static final Logger logger = LoggerFactory.getLogger(JobconnectApplication.class);
 
 	public JobconnectApplication(Employer employer, Employee employee, ResponseObject<?> response, Profile profile) {
 		this.employer = employer;
@@ -58,7 +64,7 @@ public class JobconnectApplication<T> {
 
 		@Override
 		public void onApplicationEvent(@NonNull WebServerInitializedEvent event) {
-			System.out.println("Application Loaded at http://localhost:" + serverPort);
+			logger.debug("Application Loaded at http://localhost:" + serverPort);
 		}
 	}
 
@@ -81,65 +87,7 @@ public class JobconnectApplication<T> {
 	public String version() {
 		return "0.0.1";
 	}
-
-	// Account Creation
-	// Employer
-	@PostMapping(DEFAULT_EMPLOYER_URI + "/create")
-	public ResponseEntity<ResponseObject<?>> createProfileEmployers(String accountType,
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String organizationName) {
-		try {
-			if (accountType.isEmpty() || name.isEmpty() || organizationName.isEmpty()) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "can't be empty");
-				return ResponseEntity.badRequest().body(response);
-			}
-			if (accountType.toLowerCase().equals("employer")) {
-				UUID uuid = UUID.randomUUID();
-				employer.createProfile(uuid.toString(), accountType, name, organizationName);
-			} else {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
-						accountType + " account type not supported");
-				return ResponseEntity.badRequest().body(response);
-			}
-			response = new ResponseObject<Profile>(HttpStatus.OK.value(), "ok", profile);
-			return ResponseEntity.ok(response);
-		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"Some Error Occured");
-			System.out.println("Error occured at " + e.getMessage());
-			return ResponseEntity.badRequest().body(response);
-		}
-	}
-
-	// Employee
-	// @PostMapping(DEFAULT_EMPLOYEE_URI + "/create")
-	// public ResponseEntity<ResponseObject<?>> createProfileEmployers(String accountType,
-	// 		@RequestParam(required = false) String name,
-	// 		@RequestParam(required = false) int age,
-	// 		@RequestParam(required = false) String expertise,
-	// 		@RequestParam(required = false) int experience) {
-	// 	try {
-	// 		if (accountType.isEmpty() || name.isEmpty() || expertise.isEmpty()) {
-	// 			response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "can't be empty");
-	// 			return ResponseEntity.badRequest().body(response);
-	// 		}
-	// 		if (accountType.toLowerCase().equals("employee")) {
-	// 			profile = new Profile(accountType, name, age, expertise, experience);
-	// 		} else {
-	// 			response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
-	// 					accountType + " account type not supported");
-	// 			return ResponseEntity.badRequest().body(response);
-	// 		}
-	// 		response = new ResponseObject<Profile>(HttpStatus.OK.value(), "ok", profile);
-	// 		return ResponseEntity.ok(response);
-	// 	} catch (Exception e) {
-	// 		response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-	// 				"Some Error Occured");
-	// 		System.out.println("Error occured at " + e.getMessage());
-	// 		return ResponseEntity.badRequest().body(response);
-	// 	}
-	// }
-
+	
 	// Posts
 	@PostMapping(DEFAULT_EMPLOYER_URI + "/post/create")
 	public ResponseEntity<ResponseObject<?>> employerCreatePost(
@@ -156,10 +104,12 @@ public class JobconnectApplication<T> {
 
 			response = new ResponseObject<Posts>(HttpStatus.OK.value(), "ok",
 					employer.createPost(uuid.toString(), title, description, location));
+			logger.info(employer.createPost(uuid.toString(), title, description, location).toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"Error:\t" + e.getMessage());
+					"internal error occured");
+			logger.error("Error: ", e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -175,10 +125,12 @@ public class JobconnectApplication<T> {
 			response = (result == null)
 					? new ResponseObject<Posts>(HttpStatus.BAD_REQUEST.value(), "bad", result)
 					: new ResponseObject<Posts>(HttpStatus.OK.value(), "ok", result);
+			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
-					"Error:\t" + e.getMessage());
+					"internal error occured");
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -198,14 +150,16 @@ public class JobconnectApplication<T> {
 			}
 			Posts result = employer.updatePost(employerId, title, description, location);
 			response = (result == null)
-					? new ResponseObject<Posts>(HttpStatus.BAD_REQUEST.value(), "bad", result)
+					? new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request")
 					: new ResponseObject<Posts>(HttpStatus.OK.value(), "ok", result);
-
+			logger.info(response.toString());
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
-					"Error:\t" + e.getMessage());
+					"Error:\t" + "internal error occured");
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
 		}
-		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping(DEFAULT_EMPLOYER_URI + "/post/delete")
@@ -213,10 +167,12 @@ public class JobconnectApplication<T> {
 		try {
 			response = new ResponseObject<Posts>(HttpStatus.OK.value(), "ok",
 					employer.deletePost(employerId));
+			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"Error:\t" + e.getMessage());
+					"internal error occured");
+			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}

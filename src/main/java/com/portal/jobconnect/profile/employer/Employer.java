@@ -2,16 +2,14 @@ package com.portal.jobconnect.profile.employer;
 
 import org.springframework.stereotype.Component;
 
-import com.portal.jobconnect.components.Profile;
 import com.portal.jobconnect.posts.Posts;
 
 import java.util.HashMap;
 
+
 @Component
 public class Employer {
-	public Profile profile;
-
-	Posts posts;
+	private Posts posts;
 
 	HashMap<String, Object> profileMap = new HashMap<String, Object>();
 	HashMap<String, Object> employerMap = new HashMap<String, Object>();
@@ -19,39 +17,15 @@ public class Employer {
 	public Employer() {
 	};
 
-	public Employer(Profile profile) {
-		this.profile = profile;
-	}
-
-	public Profile createProfile(String id, String accountType, String name, String organizationName) {
-		profile = new Profile(accountType, name, organizationName);
-		profileMap.put(id, profile);
-		return profile;
-	}
-
-	// public Profile(String accountType, String name, String organizationName) {
-	// this.name = name;
-	// this.accountType = accountType;
-	// this.organizationName = organizationName;
-	// }
-
-	public String setName(String id, String name) {
-		if (!profileMap.containsKey(id))
-			return null;
-		profile.setName(id, name);
-		return name;
-	}
-
 	public Posts createPost(String employerId, String title, String description, String location) {
 		if (employerMap.containsKey(employerId)) {
 			return new Posts(employerId, "Already exists"); // Chances are too low to reach here but still
 		}
 
-		// Posts
 		posts = new Posts(employerId, title, description, location);
 
 		employerMap.put(employerId, posts);
-		System.out.println("Created with UUID:\t" + employerId);
+
 		return posts;
 	}
 
@@ -87,7 +61,6 @@ public class Employer {
 				existingPosts.getLocation();
 
 			employerMap.put(employerId, existingPosts);
-			System.out.println("Updated:\t" + employerId);
 
 		} catch (Exception e) {
 			return new Posts(employerId, "Error at " + e.getMessage());

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="logs/app.log" />
+
+    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd.hh-mm-ss}.log</fileNamePattern>
+            <maxFileSize>1MB</maxFileSize>
+            <totalSizeCap>20MB</totalSizeCap>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{hh:mm:ss} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{hh:mm:ss} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.portal.jobconnect" level="trace" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE-ROLLING" />
+    </logger>
+
+    <logger name="org.springframework.web.bind.annotation" level="trace" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE-ROLLING" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE-ROLLING" />
+    </root>
+
+</configuration>

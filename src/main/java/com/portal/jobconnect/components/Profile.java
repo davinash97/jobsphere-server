@@ -6,69 +6,111 @@ import org.springframework.stereotype.Component;
 public class Profile {
 
 	// Common
-	public String name;
-	public String accountType;
+	private String name;
+	private String accountType;
+	private String email;
+	private long phone;
 
 	// Employees
-	public int age;
-	public long savedJobs;
-	public int experience;
-	public long appliedJobs;
-	public String expertise;
+	private long savedJobs;
+	private int experience;
+	private long appliedJobs;
+	private String expertise;
 
 	// Employers
-	public long numOfApplicants;
-	public String organizationName;
+	private int numOfPosts;
+	private long numOfApplicants;
+	private String organizationName;
 
 	public Profile() {
 	};
 
-	// For Employers
-	public Profile(String accountType, String name, String organizationName) {
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(String accountType) {
 		this.accountType = accountType;
-		this.organizationName = organizationName;
 	}
 
-	// For Employees
-	public Profile(String accountType, String name, int age, String expertise, int experience) {
-		this.age = age;
-		this.name = name;
-		this.accountType = accountType;
-		this.expertise = expertise;
-		this.experience = experience;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String setName(String id, String name) {
-		this.name = name;
-		return this.name;
+	public long getPhone() {
+		return phone;
+	}
+
+	public void setPhone(long phone) {
+		this.phone = phone;
+	}
+
+	public long getSavedJobs() {
+		return savedJobs;
 	}
 
 	public void setSavedJobs(long savedJobs) {
 		this.savedJobs = savedJobs;
 	}
 
+	public int getExperience() {
+		return experience;
+	}
+
 	public void setExperience(int experience) {
 		this.experience = experience;
 	}
 
-	public void setExpertise(String expertise) {
-		this.expertise = expertise;
+	public long getAppliedJobs() {
+		return appliedJobs;
 	}
 
 	public void setAppliedJobs(long appliedJobs) {
 		this.appliedJobs = appliedJobs;
 	}
 
+	public String getExpertise() {
+		return expertise;
+	}
+
+	public void setExpertise(String expertise) {
+		this.expertise = expertise;
+	}
+
+	public int getNumOfPosts() {
+		return numOfPosts;
+	}
+
+	public void setNumOfPosts(int numOfPosts) {
+		this.numOfPosts = numOfPosts;
+	}
+
+	public long getNumOfApplicants() {
+		return numOfApplicants;
+	}
+
 	public void setNumOfApplicants(long numOfApplicants) {
 		this.numOfApplicants = numOfApplicants;
 	}
 
-	public void setOrganizationName(String id, String organizationName) {
+	public String getOrganizationName() {
+		return organizationName;
+	}
+
+	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
 	}
+
 }
