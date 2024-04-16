@@ -9,8 +9,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @PropertySource("file:${user.dir}/.env")
 public class AppConfig {
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 }
