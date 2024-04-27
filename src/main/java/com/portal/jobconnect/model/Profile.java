@@ -64,8 +64,8 @@ public class Profile {
 		return phone;
 	}
 
-	public long setPhone(long phone) {
-		return phone;
+	public void setPhone(long phone) {
+		this.phone = phone;
 	}
 
 	public long getSavedJobs() {
