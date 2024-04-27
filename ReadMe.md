@@ -24,22 +24,28 @@ This repository houses the source code for a full-stack job portal application b
 
 ## Application Strucuture
 ```
-com
+src/main/java/com
 └── portal
     └── jobconnect
+        ├── application
+        │   └── ServerPortLister.java
+        ├── components
+        │   └── Profile.java
         ├── controller
-        │   ├── EmployerController.java
-        │   └── EmployeeController.java
-        ├── service
-        │   └── EmployerService.java
-        ├── repository
-        │   └── EmployerRepository.java
+        │   ├── EmployerController.java
+        │   └── HomeController.java
+        ├── JobconnectApplication.java
         ├── model
-        │   ├── Employer.java
-        │   ├── Employee.java
-        │   ├── Post.java
-        │   └── ResponseObject.java
-        └── application
-            ├── JobconnectApplication.java
-            └── ServerPortListener.java
+        │   ├── Employee.java
+        │   ├── Employer.java
+        │   ├── Posts.java
+        │   └── ResponseObject.java
+        ├── posts
+        ├── profile
+        ├── service
+        │   └── EmployerService.java
+        └── utils
+            ├── AppConfig.java
+            ├── Constants.java
+            └── DatabaseConfig.java
 ```
