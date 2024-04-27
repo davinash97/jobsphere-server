@@ -2,13 +2,13 @@ package com.portal.jobconnect.profile.employer;
 
 import org.springframework.stereotype.Component;
 
-import com.portal.jobconnect.model.Posts;
+import com.portal.jobconnect.model.Post;
 
 import java.util.HashMap;
 
 @Component
 public class Employer {
-	private Posts posts;
+	private Post posts;
 
 	HashMap<String, Object> profileMap = new HashMap<String, Object>();
 	HashMap<String, Object> employerMap = new HashMap<String, Object>();
@@ -21,18 +21,18 @@ public class Employer {
 			return employerMap.containsKey(employerId); // Chances are too low to reach here but still
 		}
 
-		posts = new Posts(employerId, title, description, location);
+		posts = new Post(employerId, title, description, location);
 
 		employerMap.put(employerId, posts);
 
 		return true;
 	}
 
-	public Posts readPost(String employerId) {
+	public Post readPost(String employerId) {
 		if (!employerMap.containsKey(employerId))
 			return null;
 
-		return (Posts) employerMap.get(employerId);
+		return (Post) employerMap.get(employerId);
 	}
 
 	public boolean updatePost(String employerId, String title, String description, String location) {
@@ -40,7 +40,7 @@ public class Employer {
 		if (!employerMap.containsKey(employerId))
 			return false;
 
-		Posts existingPosts = readPost(employerId);
+		Post existingPosts = readPost(employerId);
 
 		if (title != null)
 			existingPosts.setTitle(title);
@@ -69,9 +69,9 @@ public class Employer {
 		return true;
 	}
 
-	public Posts totalPosts(String employerId) {
+	public Post totalPosts(String employerId) {
 		if (!employerMap.containsKey(employerId))
-			return new Posts(employerId, "doesn't exist");
-		return new Posts(employerId, Integer.toString(employerMap.size()));
+			return new Post(employerId, "doesn't exist");
+		return new Post(employerId, Integer.toString(employerMap.size()));
 	}
 }

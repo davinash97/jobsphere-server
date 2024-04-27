@@ -15,23 +15,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.portal.jobconnect.application.ServerPortLister;
-import com.portal.jobconnect.model.Posts;
+import com.portal.jobconnect.model.Post;
 import com.portal.jobconnect.model.ResponseObject;
-import com.portal.jobconnect.service.EmployerService;
+import com.portal.jobconnect.service.PostService;
 import com.portal.jobconnect.utils.Constants;
 
 @RestController
-public class EmployerController implements Constants {
+public class PostController implements Constants {
 
-	private final EmployerService employer = new EmployerService();
+	private final PostService post = new PostService();
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerPortLister.class);
 
 	private ResponseObject<?> response;
 
-	// Posts
 	@PostMapping(DEFAULT_EMPLOYER_URI + "/post/create")
-	public ResponseEntity<ResponseObject<?>> employerCreatePost(
+	public ResponseEntity<ResponseObject<?>> createPost(
 			@RequestParam String title,
 			@RequestParam String description,
 			@RequestParam String location) {
@@ -43,10 +42,10 @@ public class EmployerController implements Constants {
 
 			UUID uuid = UUID.randomUUID();
 
-			if (employer.createPost(uuid.toString(), title, description, location)) {
+			if (post.createPost(uuid.toString(), title, description, location)) {
 				logger.info("Successfully post created for Id:\t" + uuid.toString());
 			}
-			return employerReadPost(uuid.toString());
+			return readPost(uuid.toString());
 		} catch (Exception e) {
 			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occured");
@@ -56,16 +55,16 @@ public class EmployerController implements Constants {
 	}
 
 	@GetMapping(DEFAULT_EMPLOYER_URI + "/post/read")
-	public ResponseEntity<ResponseObject<?>> employerReadPost(String employerId) {
+	public ResponseEntity<ResponseObject<?>> readPost(String postId) {
 		try {
-			if (employerId.length() != 36) {
+			if (postId.length() != 36) {
 				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
-			Posts result = employer.readPost(employerId);
+			Post result = post.readPost(postId);
 			response = (result == null)
-					? new ResponseObject<Posts>(HttpStatus.BAD_REQUEST.value(), "bad", result)
-					: new ResponseObject<Posts>(HttpStatus.OK.value(), "ok", result);
+					? new ResponseObject<Post>(HttpStatus.BAD_REQUEST.value(), "bad", result)
+					: new ResponseObject<Post>(HttpStatus.OK.value(), "ok", result);
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
@@ -77,8 +76,8 @@ public class EmployerController implements Constants {
 	}
 
 	@PutMapping(DEFAULT_EMPLOYER_URI + "/post/update")
-	public ResponseEntity<ResponseObject<?>> employerUpdatePost(
-			@RequestParam String employerId,
+	public ResponseEntity<ResponseObject<?>> updatePost(
+			@RequestParam String postId,
 			@RequestParam(required = false) String title,
 			@RequestParam(required = false) String description,
 			@RequestParam(required = false) String location) {
@@ -90,12 +89,12 @@ public class EmployerController implements Constants {
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			if (!employer.updatePost(employerId, title, description, location)) {
+			if (!post.updatePost(postId, title, description, location)) {
 				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
 				return ResponseEntity.badRequest().body(response);
 			}
 			logger.info(response.toString());
-			return employerReadPost(employerId);
+			return readPost(postId);
 		} catch (Exception e) {
 			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
 					"Error:\t" + "internal error occured");
@@ -105,10 +104,10 @@ public class EmployerController implements Constants {
 	}
 
 	@DeleteMapping(DEFAULT_EMPLOYER_URI + "/post/delete")
-	public ResponseEntity<ResponseObject<?>> employerDeletePost(@RequestParam String employerId) {
+	public ResponseEntity<ResponseObject<?>> deletePost(@RequestParam String postId) {
 		try {
 			response = new ResponseObject<Boolean>(HttpStatus.OK.value(), "ok",
-					employer.deletePost(employerId));
+					post.deletePost(postId));
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
@@ -118,5 +117,4 @@ public class EmployerController implements Constants {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-
 }

@@ -29,21 +29,18 @@ src/main/java/com
     └── jobconnect
         ├── application
         │   └── ServerPortLister.java
-        ├── components
-        │   └── Profile.java
         ├── controller
-        │   ├── EmployerController.java
-        │   └── HomeController.java
+        │   ├── HomeController.java
+        │   ├── PostController.java
+        │   └── ProfileController.java
         ├── JobconnectApplication.java
         ├── model
-        │   ├── Employee.java
-        │   ├── Employer.java
-        │   ├── Posts.java
+        │   ├── Post.java
+        │   ├── Profile.java
         │   └── ResponseObject.java
-        ├── posts
-        ├── profile
         ├── service
-        │   └── EmployerService.java
+        │   ├── PostService.java
+        │   └── ProfileService.java
         └── utils
             ├── AppConfig.java
             ├── Constants.java

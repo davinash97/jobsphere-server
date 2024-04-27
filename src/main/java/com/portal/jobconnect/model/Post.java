@@ -20,7 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Component
 @Entity
 @Table(name = "postsDb")
-public class Posts {
+public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
@@ -47,15 +47,15 @@ public class Posts {
 	@Column(nullable = false)
 	private List<String> idsOfAppliedApplicants;
 
-	public Posts() {
+	public Post() {
 	};
 
-	public Posts(String id, String description) {
+	public Post(String id, String description) {
 		this.id = id;
 		this.description = description;
 	}
 
-	public Posts(String id, String title, String description, String location) {
+	public Post(String id, String title, String description, String location) {
 		this.id = id;
 		this.title = title;
 		this.location = location;

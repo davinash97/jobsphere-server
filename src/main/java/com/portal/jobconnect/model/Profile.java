@@ -1,4 +1,4 @@
-package com.portal.jobconnect.components;
+package com.portal.jobconnect.model;
 
 import org.springframework.stereotype.Component;
 
@@ -7,23 +7,30 @@ public class Profile {
 
 	// Common
 	private String name;
+	private String id;
 	private String accountType;
 	private String email;
 	private long phone;
 
-	// Employees
+	// Employee
 	private long savedJobs;
 	private int experience;
 	private long appliedJobs;
 	private String expertise;
 
-	// Employers
+	// Employer
 	private int numOfPosts;
 	private long numOfApplicants;
 	private String organizationName;
 
-	public Profile() {
-	};
+	// Common
+	public Profile(String id, String name, String accountType, String email, long phone) {
+		this.id = id;
+		this.name = name;
+		this.accountType = accountType;
+		this.email = email;
+		this.phone = phone;
+	}
 
 	public String getName() {
 		return name;
@@ -31,6 +38,10 @@ public class Profile {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getAccountType() {
@@ -53,8 +64,8 @@ public class Profile {
 		return phone;
 	}
 
-	public void setPhone(long phone) {
-		this.phone = phone;
+	public long setPhone(long phone) {
+		return phone;
 	}
 
 	public long getSavedJobs() {
