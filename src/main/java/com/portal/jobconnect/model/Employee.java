@@ -1,4 +1,4 @@
-package com.portal.jobconnect.profile.employee;
+package com.portal.jobconnect.model;
 
 import org.springframework.stereotype.Component;
 

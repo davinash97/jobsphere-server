@@ -1,4 +1,4 @@
-package com.portal.jobconnect.components;
+package com.portal.jobconnect.model;
 
 import org.springframework.stereotype.Component;
 

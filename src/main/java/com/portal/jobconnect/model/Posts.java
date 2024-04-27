@@ -1,4 +1,4 @@
-package com.portal.jobconnect.posts;
+package com.portal.jobconnect.model;
 
 import java.time.LocalDateTime;
 
