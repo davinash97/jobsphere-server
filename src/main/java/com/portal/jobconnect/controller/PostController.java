@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.portal.jobconnect.application.ServerPortLister;
 import com.portal.jobconnect.model.Post;
 import com.portal.jobconnect.model.ResponseObject;
 import com.portal.jobconnect.service.PostService;
@@ -25,7 +24,7 @@ public class PostController implements Constants {
 
 	private final PostService post = new PostService();
 
-	private static final Logger logger = LoggerFactory.getLogger(ServerPortLister.class);
+	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
 	private ResponseObject<?> response;
 
@@ -43,7 +42,7 @@ public class PostController implements Constants {
 			UUID uuid = UUID.randomUUID();
 
 			if (post.createPost(uuid.toString(), title, description, location)) {
-				logger.info("Successfully post created for Id:\t" + uuid.toString());
+				logger.info("Successfully created post with Id:\t" + uuid.toString());
 			}
 			return readPost(uuid.toString());
 		} catch (Exception e) {
@@ -63,12 +62,12 @@ public class PostController implements Constants {
 			}
 			Post result = post.readPost(postId);
 			response = (result == null)
-					? new ResponseObject<Post>(HttpStatus.BAD_REQUEST.value(), "bad", result)
+					? new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
 					: new ResponseObject<Post>(HttpStatus.OK.value(), "ok", result);
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occured");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
@@ -89,15 +88,11 @@ public class PostController implements Constants {
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			if (!post.updatePost(postId, title, description, location)) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
-				return ResponseEntity.badRequest().body(response);
-			}
-			logger.info(response.toString());
+			post.updatePost(postId, title, description, location);
 			return readPost(postId);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
-					"Error:\t" + "internal error occured");
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occured");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}

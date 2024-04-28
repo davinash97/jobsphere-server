@@ -2,32 +2,37 @@ package com.portal.jobconnect.model;
 
 import org.springframework.stereotype.Component;
 
+import com.portal.jobconnect.enums.Gender;
+import com.portal.jobconnect.enums.Role;
+
 @Component
 public class Profile {
 
 	// Common
-	private String name;
 	private String id;
-	private String accountType;
+	private String name;
+	private Gender gender = Gender.UNDEFINED;
+	private Role role = Role.SEEKER;
 	private String email;
-	private long phone;
+	private Long phone;
 
 	// Employee
-	private long savedJobs;
-	private int experience;
-	private long appliedJobs;
+	private Long savedJobs;
+	private Integer experience;
+	private Long appliedJobs;
 	private String expertise;
 
 	// Employer
-	private int numOfPosts;
-	private long numOfApplicants;
+	private Integer numOfPosts;
+	private Long numOfApplicants;
 	private String organizationName;
 
 	// Common
-	public Profile(String id, String name, String accountType, String email, long phone) {
+	public Profile(String id, String name, Gender gender, Role role, String email, Long phone) {
 		this.id = id;
 		this.name = name;
-		this.accountType = accountType;
+		this.gender = gender;
+		this.role = role;
 		this.email = email;
 		this.phone = phone;
 	}
@@ -44,12 +49,20 @@ public class Profile {
 		return id;
 	}
 
-	public String getAccountType() {
-		return accountType;
+	public Gender getGender() {
+		return gender;
 	}
 
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public String getEmail() {
@@ -60,35 +73,35 @@ public class Profile {
 		this.email = email;
 	}
 
-	public long getPhone() {
+	public Long getPhone() {
 		return phone;
 	}
 
-	public void setPhone(long phone) {
+	public void setPhone(Long phone) {
 		this.phone = phone;
 	}
 
-	public long getSavedJobs() {
+	public Long getSavedJobs() {
 		return savedJobs;
 	}
 
-	public void setSavedJobs(long savedJobs) {
+	public void setSavedJobs(Long savedJobs) {
 		this.savedJobs = savedJobs;
 	}
 
-	public int getExperience() {
+	public Integer getExperience() {
 		return experience;
 	}
 
-	public void setExperience(int experience) {
+	public void setExperience(Integer experience) {
 		this.experience = experience;
 	}
 
-	public long getAppliedJobs() {
+	public Long getAppliedJobs() {
 		return appliedJobs;
 	}
 
-	public void setAppliedJobs(long appliedJobs) {
+	public void setAppliedJobs(Long appliedJobs) {
 		this.appliedJobs = appliedJobs;
 	}
 
@@ -100,19 +113,19 @@ public class Profile {
 		this.expertise = expertise;
 	}
 
-	public int getNumOfPosts() {
+	public Integer getNumOfPosts() {
 		return numOfPosts;
 	}
 
-	public void setNumOfPosts(int numOfPosts) {
+	public void setNumOfPosts(Integer numOfPosts) {
 		this.numOfPosts = numOfPosts;
 	}
 
-	public long getNumOfApplicants() {
+	public Long getNumOfApplicants() {
 		return numOfApplicants;
 	}
 
-	public void setNumOfApplicants(long numOfApplicants) {
+	public void setNumOfApplicants(Long numOfApplicants) {
 		this.numOfApplicants = numOfApplicants;
 	}
 

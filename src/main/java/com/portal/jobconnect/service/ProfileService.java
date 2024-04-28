@@ -2,24 +2,33 @@ package com.portal.jobconnect.service;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Component;
 
 import com.portal.jobconnect.model.Profile;
+import com.portal.jobconnect.enums.Role;
+import com.portal.jobconnect.enums.Gender;
 
 @Component
 public class ProfileService {
 
-	HashMap<String, Object> profileMap = new HashMap<String, Object>();
-
 	Profile profile;
+
+	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
+
+	HashMap<String, Object> profileMap = new HashMap<String, Object>();
 
 	public ProfileService() {
 	}
 
-	public boolean createProfile(String profileId, String name, String accountType, String email, long phone) {
+	public boolean createProfile(String profileId, String name, String gender, String role, String email, long phone) {
 		if (profileMap.containsKey(profileId))
 			return false;
-		profile = new Profile(profileId, name, accountType, email, phone);
+		Role roleEnum = Role.valueOf(role.toUpperCase());
+		Gender genderEnum = Gender.valueOf(gender.toUpperCase());
+		profile = new Profile(profileId, name, genderEnum, roleEnum, email, phone);
 		profileMap.put(profileId, profile);
 		return true;
 	}
@@ -31,51 +40,63 @@ public class ProfileService {
 		return (Profile) profileMap.get(profileId);
 	}
 
-	public boolean updateProfile(String profileId, String name, String accountType, String email, long phone,
-			int numOfPosts, long numOfApplicants, String organizationName) {
+	public boolean updateProfile(String profileId, String name, String gender, String role, String email,
+			Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
 
 		if (!profileMap.containsKey(profileId))
 			return false;
 
-		Profile existingProfile = readProfile(profileId);
+		try {
+			Profile existingProfile = readProfile(profileId);
 
-		if (name != null)
-			existingProfile.setName(name);
-		else
-			existingProfile.getName();
+			if (name != null)
+				existingProfile.setName(name);
+			else
+				existingProfile.getName();
 
-		if (accountType != null)
-			existingProfile.setAccountType(accountType);
-		else
-			existingProfile.getAccountType();
+			if (gender != null) {
+				Gender genderEnum = Gender.valueOf(gender.toUpperCase());
+				existingProfile.setGender(genderEnum);
+			} else
+				existingProfile.getGender();
 
-		if (email != null)
-			existingProfile.setEmail(email);
-		else
-			existingProfile.getEmail();
+			if (role != null) {
+				Role roleEnum = Role.valueOf(role.toUpperCase());
+				existingProfile.setRole(roleEnum);
+			} else
+				existingProfile.getRole();
 
-		if (phone != 0)
-			existingProfile.setPhone(phone);
-		else
-			existingProfile.getPhone();
+			if (email != null)
+				existingProfile.setEmail(email);
+			else
+				existingProfile.getEmail();
 
-		if (numOfPosts != 0)
-			existingProfile.setNumOfPosts(numOfPosts);
-		else
-			existingProfile.getNumOfPosts();
+			if (phone != 0)
+				existingProfile.setPhone(phone);
+			else {
+				existingProfile.getPhone();
+			}
 
-		if (numOfApplicants != 0)
-			existingProfile.setNumOfApplicants(numOfApplicants);
-		else
-			existingProfile.getNumOfApplicants();
+			if (numOfPosts != 0)
+				existingProfile.setNumOfPosts(numOfPosts);
+			else
+				existingProfile.getNumOfPosts();
 
-		if (organizationName.isEmpty())
-			existingProfile.setOrganizationName(organizationName);
-		else
-			existingProfile.getOrganizationName();
+			if (numOfApplicants != 0)
+				existingProfile.setNumOfApplicants(numOfApplicants);
+			else
+				existingProfile.getNumOfApplicants();
 
-		profileMap.put(profileId, existingProfile);
+			if (organizationName != null)
+				existingProfile.setOrganizationName(organizationName);
+			else
+				existingProfile.getOrganizationName();
 
+			profileMap.put(profileId, existingProfile);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
 		return true;
 	}
 

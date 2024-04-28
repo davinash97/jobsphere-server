@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.portal.jobconnect.application.ServerPortLister;
 import com.portal.jobconnect.model.Profile;
 import com.portal.jobconnect.model.ResponseObject;
 import com.portal.jobconnect.service.ProfileService;
@@ -24,25 +24,26 @@ public class ProfileController implements Constants {
 
 	private final ProfileService profile = new ProfileService();
 
-	private static final Logger logger = LoggerFactory.getLogger(ServerPortLister.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_PROFILE_URI + "/create")
 	public ResponseEntity<ResponseObject<?>> createProfile(
 			@RequestParam String name,
-			@RequestParam(required = false) String accountType,
+			@RequestParam(required = false, defaultValue = "SEEKER") String role,
+			@RequestParam(required = false, defaultValue = "UNDEFINED") String gender,
 			@RequestParam(required = false) String email,
-			@RequestParam(required = false) long phone) {
+			@RequestParam(required = false) Long phone) {
 		try {
-			if (name.isEmpty() || accountType.isEmpty()) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "Bad Request");
+			if (name.isEmpty() || role.isEmpty() || gender.isEmpty()) {
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
 				return ResponseEntity.ok(response);
 			}
 
 			UUID profileId = UUID.randomUUID();
 
-			if (profile.createProfile(profileId.toString(), name, accountType, email, phone)) {
+			if (profile.createProfile(profileId.toString(), name, gender, role, email, phone)) {
 				logger.info("Successfully profile created for Id:\t" + profileId.toString());
 			}
 
@@ -62,14 +63,15 @@ public class ProfileController implements Constants {
 				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
+
 			Profile result = profile.readProfile(profileId);
 			response = (result == null)
-					? new ResponseObject<Profile>(HttpStatus.BAD_REQUEST.value(), "bad", result)
+					? new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
 					: new ResponseObject<Profile>(HttpStatus.OK.value(), "ok", result);
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occured");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
@@ -78,26 +80,30 @@ public class ProfileController implements Constants {
 
 	@PutMapping(DEFAULT_PROFILE_URI + "/update")
 	public ResponseEntity<ResponseObject<?>> updateProfile(
-			String profileId,
+			@RequestParam String profileId,
 			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String accountType,
+			@RequestParam(required = false) String role,
+			@RequestParam(required = false) String gender,
 			@RequestParam(required = false) String email,
-			@RequestParam(required = false) long phone,
-			@RequestParam(required = false) int numOfPosts,
-			@RequestParam(required = false) long numOfApplicants,
+			@RequestParam(required = false) Long phone,
+			@RequestParam(required = false) Integer numOfPosts,
+			@RequestParam(required = false) Long numOfApplicants,
 			@RequestParam(required = false) String organizationName) {
 
 		try {
-			if (!profile.updateProfile(profileId, name, accountType, email, phone, numOfPosts, numOfApplicants,
-					organizationName)) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
+			if (name == null && role == null && gender == null && email == null && organizationName == null) {
+				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
+						"At least one of name, role, gender, email, or organization must be provided.");
 				return ResponseEntity.badRequest().body(response);
-			}
-			logger.info(response.toString());
+			}	
+
+			profile.updateProfile(profileId, name, gender, role, email, phone, numOfPosts, numOfApplicants,
+					organizationName);
+
 			return readProfile(profileId);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ok",
-					"Error:\t" + "internal error occured");
+			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occured");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}

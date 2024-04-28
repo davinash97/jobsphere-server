@@ -35,7 +35,7 @@ public class Post {
 	private String description;
 
 	@Column(nullable = false)
-	private long numOfApplicants;
+	private Long numOfApplicants;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -102,11 +102,11 @@ public class Post {
 		this.updatedAt = updatedAt;
 	}
 
-	public long getNumOfApplicants() {
+	public Long getNumOfApplicants() {
 		return numOfApplicants;
 	}
 
-	public void setNumOfApplicants(long numOfApplicants) {
+	public void setNumOfApplicants(Long numOfApplicants) {
 		this.numOfApplicants = numOfApplicants;
 	}
 
