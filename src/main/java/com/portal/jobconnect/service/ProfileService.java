@@ -23,7 +23,7 @@ public class ProfileService {
 	public ProfileService() {
 	}
 
-	public boolean createProfile(String profileId, String name, String gender, String role, String email, long phone) {
+	public boolean createProfile(String profileId, String name, String gender, String role, String email, Long phone) {
 		if (profileMap.containsKey(profileId))
 			return false;
 		Role roleEnum = Role.valueOf(role.toUpperCase());
