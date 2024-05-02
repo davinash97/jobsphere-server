@@ -62,7 +62,7 @@ public class Post {
 		this.description = description;
 	};
 
-	public String getId() {
+	public String getPostId() {
 		return id;
 	}
 
