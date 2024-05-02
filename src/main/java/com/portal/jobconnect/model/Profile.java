@@ -5,11 +5,12 @@ import org.springframework.stereotype.Component;
 import com.portal.jobconnect.enums.Gender;
 import com.portal.jobconnect.enums.Role;
 
+@SuppressWarnings("ALL")
 @Component
 public class Profile {
 
 	// Common
-	private String id;
+	private final String profileId;
 	private String name;
 	private Gender gender = Gender.UNDEFINED;
 	private Role role = Role.SEEKER;
@@ -28,8 +29,8 @@ public class Profile {
 	private String organizationName;
 
 	// Common
-	public Profile(String id, String name, Gender gender, Role role, String email, Long phone) {
-		this.id = id;
+	public Profile(String profileId, String name, Gender gender, Role role, String email, Long phone) {
+		this.profileId = profileId;
 		this.name = name;
 		this.gender = gender;
 		this.role = role;
@@ -46,7 +47,7 @@ public class Profile {
 	}
 
 	public String getId() {
-		return id;
+		return profileId;
 	}
 
 	public Gender getGender() {

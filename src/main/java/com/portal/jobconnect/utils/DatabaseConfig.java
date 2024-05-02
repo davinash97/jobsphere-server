@@ -3,6 +3,7 @@ package com.portal.jobconnect.utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("ALL")
 @Component
 public class DatabaseConfig {
 
@@ -10,9 +11,9 @@ public class DatabaseConfig {
 	public String dbUrl;
 
 	@Value("${spring.datasource.username}")
-	private String dbUsername;
+	public String dbUsername;
 
 	@Value("${spring.datasource.password}")
-	private String dbPassword;
+	public String dbPassword;
 
 }

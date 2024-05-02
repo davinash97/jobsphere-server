@@ -20,7 +20,7 @@ public class ServerPortLister {
 
 		@Override
 		public void onApplicationEvent(@NonNull WebServerInitializedEvent event) {
-			logger.debug("Application Loaded at http://localhost:" + serverPort);
+            logger.debug("Application Loaded at http://localhost:{}", serverPort);
 		}
 	}
 }

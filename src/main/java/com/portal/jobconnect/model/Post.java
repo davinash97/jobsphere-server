@@ -1,29 +1,28 @@
 package com.portal.jobconnect.model;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Table;
 
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+@SuppressWarnings("ALL")
 @Component
 @Entity
 @Table(name = "postsDb")
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
+	private String postId;
 
 	@Column(nullable = false)
 	private String title;
@@ -48,22 +47,22 @@ public class Post {
 	private List<String> idsOfAppliedApplicants;
 
 	public Post() {
-	};
+    }
 
-	public Post(String id, String description) {
-		this.id = id;
+	public Post(String postId, String description) {
+		this.postId = postId;
 		this.description = description;
-	}
+    }
 
-	public Post(String id, String title, String description, String location) {
-		this.id = id;
+	public Post(String postId, String title, String description, String location) {
+		this.postId = postId;
 		this.title = title;
 		this.location = location;
 		this.description = description;
-	};
+    }
 
 	public String getPostId() {
-		return id;
+		return postId;
 	}
 
 	public String getTitle() {

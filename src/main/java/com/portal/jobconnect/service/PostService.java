@@ -1,17 +1,15 @@
 package com.portal.jobconnect.service;
 
-import java.util.HashMap;
-
+import com.portal.jobconnect.model.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.portal.jobconnect.model.Post;
+import java.util.HashMap;
 
 public class PostService {
-	private Post post;
 
-	private static final Logger logger = LoggerFactory.getLogger(PostService.class);
-	HashMap<String, Object> postMap = new HashMap<String, Object>();
+    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
+	HashMap<String, Object> postMap = new HashMap<>();
 
 	public boolean createPost(String postId, String title, String description, String location) {
 
@@ -24,7 +22,7 @@ public class PostService {
 				return postMap.containsKey(postId); // Chances are too low to reach here but still
 			}
 
-			post = new Post(postId, title, description, location);
+            Post post = new Post(postId, title, description, location);
 
 			postMap.put(postId, post);
 
@@ -51,18 +49,12 @@ public class PostService {
 			Post existingPosts = readPost(postId);
 			if (title != null)
 				existingPosts.setTitle(title);
-			else
-				existingPosts.getTitle();
 
 			if (description != null)
 				existingPosts.setDescription(description);
-			else
-				existingPosts.getDescription();
 
 			if (location != null)
 				existingPosts.setLocation(location);
-			else
-				existingPosts.getLocation();
 
 			postMap.put(postId, existingPosts);
 

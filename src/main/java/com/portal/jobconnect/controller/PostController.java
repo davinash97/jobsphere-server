@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,20 +34,20 @@ public class PostController implements Constants {
 			@RequestParam String location) {
 		try {
 			if (title.isEmpty() || description.isEmpty() || location.isEmpty()) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "Bad Request");
+				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "Bad Request");
 				return ResponseEntity.ok(response);
 			}
 
 			UUID uuid = UUID.randomUUID();
 
 			if (post.createPost(uuid.toString(), title, description, location)) {
-				logger.info("Successfully created post with Id:\t" + uuid.toString());
+                logger.info("Successfully created post with Id:\t{}", uuid);
 			}
 			return readPost(uuid.toString());
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
-			logger.error("Error: ", e.getMessage());
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
+			logger.error("Error occurred at:{}", e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -57,18 +56,18 @@ public class PostController implements Constants {
 	public ResponseEntity<ResponseObject<?>> readPost(String postId) {
 		try {
 			if (postId.length() != 36) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
+				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
 			Post result = post.readPost(postId);
 			response = (result == null)
-					? new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
-					: new ResponseObject<Post>(HttpStatus.OK.value(), "ok", result);
+					? new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "bad", "id doesn't exist")
+					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
@@ -83,7 +82,7 @@ public class PostController implements Constants {
 
 		try {
 			if (title == null && description == null && location == null) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
+				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad",
 						"At least one of title, description, or location must be provided.");
 				return ResponseEntity.badRequest().body(response);
 			}
@@ -91,8 +90,8 @@ public class PostController implements Constants {
 			post.updatePost(postId, title, description, location);
 			return readPost(postId);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
@@ -101,13 +100,14 @@ public class PostController implements Constants {
 	@DeleteMapping(DEFAULT_EMPLOYER_URI + "/post/delete")
 	public ResponseEntity<ResponseObject<?>> deletePost(@RequestParam String postId) {
 		try {
-			response = new ResponseObject<Boolean>(HttpStatus.OK.value(), "ok",
-					post.deletePost(postId));
+			response = (post.deletePost(postId))
+					? new ResponseObject<>(HttpStatus.OK.value(), "ok")
+					: new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "not found");
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}

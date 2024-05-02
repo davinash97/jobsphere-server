@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,21 +36,21 @@ public class ProfileController implements Constants {
 			@RequestParam(required = false) Long phone) {
 		try {
 			if (name.isEmpty() || role.isEmpty() || gender.isEmpty()) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
+				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
 				return ResponseEntity.ok(response);
 			}
 
 			UUID profileId = UUID.randomUUID();
 
 			if (profile.createProfile(profileId.toString(), name, gender, role, email, phone)) {
-				logger.info("Successfully profile created for Id:\t" + profileId.toString());
+                logger.info("Successfully profile created for Id:\t{}", profileId);
 			}
 
 			return readProfile(profileId.toString());
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
-			logger.error("Error: ", e.getMessage());
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
+			logger.error("Error occurred at: {}", e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -60,19 +59,19 @@ public class ProfileController implements Constants {
 	public ResponseEntity<ResponseObject<?>> readProfile(String profileId) {
 		try {
 			if (profileId.length() != 36) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
+				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
 
 			Profile result = profile.readProfile(profileId);
 			response = (result == null)
-					? new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
-					: new ResponseObject<Profile>(HttpStatus.OK.value(), "ok", result);
+					? new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
+					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
@@ -92,7 +91,7 @@ public class ProfileController implements Constants {
 
 		try {
 			if (name == null && role == null && gender == null && email == null && organizationName == null) {
-				response = new ResponseObject<String>(HttpStatus.BAD_REQUEST.value(), "bad",
+				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad",
 						"At least one of name, role, gender, email, or organization must be provided.");
 				return ResponseEntity.badRequest().body(response);
 			}	
@@ -102,8 +101,8 @@ public class ProfileController implements Constants {
 
 			return readProfile(profileId);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
@@ -112,13 +111,13 @@ public class ProfileController implements Constants {
 	@DeleteMapping(DEFAULT_PROFILE_URI + "/delete")
 	public ResponseEntity<ResponseObject<?>> deleteProfile(@RequestParam String profileId) {
 		try {
-			response = new ResponseObject<Boolean>(HttpStatus.OK.value(), "ok",
+			response = new ResponseObject<>(HttpStatus.OK.value(), "ok",
 					profile.deleteProfile(profileId));
 			logger.info(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			response = new ResponseObject<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
-					"internal error occured");
+			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
+					"internal error occurred");
 			logger.error(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
