@@ -1,10 +1,9 @@
 package com.portal.jobconnect.controller;
 
+import com.portal.jobconnect.utils.Constants;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
-
-import com.portal.jobconnect.utils.Constants;
 
 @RestController
 public class HomeController implements Constants {

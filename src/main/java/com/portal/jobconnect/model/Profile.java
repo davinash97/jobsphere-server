@@ -1,9 +1,8 @@
 package com.portal.jobconnect.model;
 
-import org.springframework.stereotype.Component;
-
 import com.portal.jobconnect.enums.Gender;
 import com.portal.jobconnect.enums.Role;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings("ALL")
 @Component
@@ -37,17 +36,15 @@ public class Profile {
 		this.email = email;
 		this.phone = phone;
 	}
-
+	public String getProfileId() {
+		return profileId;
+	}
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getId() {
-		return profileId;
 	}
 
 	public Gender getGender() {

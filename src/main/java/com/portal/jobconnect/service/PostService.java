@@ -57,7 +57,7 @@ public class PostService {
 				existingPosts.setLocation(location);
 
 			postMap.put(postId, existingPosts);
-
+			existingPosts.setUpdatedAt();
 			return true;
 		} catch (Exception e) {
 			logger.error(e.getMessage());

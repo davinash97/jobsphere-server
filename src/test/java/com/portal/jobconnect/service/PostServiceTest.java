@@ -1,14 +1,11 @@
 package com.portal.jobconnect.service;
 
-import static org.junit.Assert.assertNull;
+import com.portal.jobconnect.model.Post;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.portal.jobconnect.model.Post;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PostServiceTest {
 
@@ -40,6 +37,10 @@ public class PostServiceTest {
 
 	@Test
 	public void testCreatePost() {
+		postId = "1";
+		title = "test title";
+		description = "test description";
+		location = "test location";
 		boolean result = postService.createPost(postId, title, description, location);
 
 		assertTrue(result);

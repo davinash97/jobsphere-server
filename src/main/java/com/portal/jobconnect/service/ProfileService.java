@@ -1,14 +1,13 @@
 package com.portal.jobconnect.service;
 
-import java.util.HashMap;
-
+import com.portal.jobconnect.enums.Gender;
+import com.portal.jobconnect.enums.Role;
+import com.portal.jobconnect.model.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.portal.jobconnect.enums.Gender;
-import com.portal.jobconnect.enums.Role;
-import com.portal.jobconnect.model.Profile;
+import java.util.HashMap;
 
 @Component
 public class ProfileService {
