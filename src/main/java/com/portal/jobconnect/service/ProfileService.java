@@ -5,11 +5,11 @@ import com.portal.jobconnect.enums.Role;
 import com.portal.jobconnect.model.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
-@Component
+@Service
 public class ProfileService {
 
 	Profile profile;

@@ -1,8 +1,8 @@
 package com.portal.jobconnect.model;
 
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-@Component
+@ResponseBody
 public class ResponseObject<T> {
 	public int code;
 	public String status;

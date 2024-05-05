@@ -2,10 +2,8 @@ package com.portal.jobconnect.model;
 
 import com.portal.jobconnect.enums.Gender;
 import com.portal.jobconnect.enums.Role;
-import org.springframework.stereotype.Component;
 
 @SuppressWarnings("ALL")
-@Component
 public class Profile {
 
 	// Common

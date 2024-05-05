@@ -1,10 +1,10 @@
 package com.portal.jobconnect.utils;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 @SuppressWarnings("ALL")
-@Component
+@Configuration
 public class DatabaseConfig {
 
 	@Value("${spring.datasource.url}")

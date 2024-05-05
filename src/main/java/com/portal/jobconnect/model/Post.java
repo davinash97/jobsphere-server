@@ -2,18 +2,17 @@ package com.portal.jobconnect.model;
 
 import com.portal.jobconnect.utils.Constants;
 import javax.persistence.Table;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-@Component
 @Entity
-@Table(name = "postsDb")
+@Table(name = "posts")
 public class Post implements Constants {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

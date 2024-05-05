@@ -3,9 +3,11 @@ package com.portal.jobconnect.service;
 import com.portal.jobconnect.model.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+@Service
 public class PostService {
 
     private static final Logger logger = LoggerFactory.getLogger(PostService.class);
