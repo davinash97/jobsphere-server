@@ -16,10 +16,8 @@ import java.util.UUID;
 @RestController
 public class PostController implements Constants {
 
-	private final PostService post = new PostService();
-
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
-
+	private final PostService post = new PostService();
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_POST_URI + "/create")

@@ -34,9 +34,11 @@ public class Profile {
 		this.email = email;
 		this.phone = phone;
 	}
+
 	public String getProfileId() {
 		return profileId;
 	}
+
 	public String getName() {
 		return name;
 	}

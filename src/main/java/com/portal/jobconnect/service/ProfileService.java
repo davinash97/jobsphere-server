@@ -12,10 +12,8 @@ import java.util.HashMap;
 @Service
 public class ProfileService {
 
-	Profile profile;
-
 	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
-
+	Profile profile;
 	HashMap<String, Object> profileMap = new HashMap<>();
 
 	public ProfileService() {
@@ -39,7 +37,7 @@ public class ProfileService {
 	}
 
 	public boolean updateProfile(String profileId, String name, String gender, String role, String email,
-							  Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
+								 Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
 
 		if (!profileMap.containsKey(profileId))
 			return false;

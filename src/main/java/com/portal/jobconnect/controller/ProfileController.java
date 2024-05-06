@@ -16,10 +16,8 @@ import java.util.UUID;
 @RestController
 public class ProfileController implements Constants {
 
-	private final ProfileService profile = new ProfileService();
-
 	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
-
+	private final ProfileService profile = new ProfileService();
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_PROFILE_URI + "/create")

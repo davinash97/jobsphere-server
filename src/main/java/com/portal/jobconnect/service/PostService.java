@@ -11,7 +11,7 @@ import java.util.UUID;
 @Service
 public class PostService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PostService.class);
+	private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 	HashMap<UUID, Object> postMap = new HashMap<>();
 
 	public boolean createPost(UUID postId, String title, String description, String location) {
@@ -24,7 +24,7 @@ public class PostService {
 			if (postMap.containsKey(postId)) {
 				return postMap.containsKey(postId); // Chances too low to reach here but still
 			}
-            Post post = new Post(postId, title, description, location);
+			Post post = new Post(postId, title, description, location);
 
 			postMap.put(postId, post);
 

@@ -40,7 +40,7 @@ public class Post implements Constants {
 	private List<String> idsOfAppliedApplicants;
 
 	public Post() {
-    }
+	}
 
 	public Post(UUID postId, String title, String description, String location) {
 		this.postId = postId;
@@ -49,7 +49,7 @@ public class Post implements Constants {
 		this.description = description;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
-    }
+	}
 
 	public UUID getPostId() {
 		return postId;
