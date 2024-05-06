@@ -3,14 +3,14 @@ package com.portal.jobconnect.model;
 import com.portal.jobconnect.enums.Gender;
 import com.portal.jobconnect.enums.Role;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("unused")
 public class Profile {
 
 	// Common
 	private final String profileId;
 	private String name;
-	private Gender gender = Gender.UNDEFINED;
-	private Role role = Role.SEEKER;
+	private Gender gender;
+	private Role role;
 	private String email;
 	private Long phone;
 

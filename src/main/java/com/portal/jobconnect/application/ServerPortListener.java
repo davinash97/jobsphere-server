@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-@SuppressWarnings("ALL")
+@SuppressWarnings("unused")
 public class ServerPortListener implements ApplicationListener<WebServerInitializedEvent> {
 	private static final Logger logger = LoggerFactory.getLogger(ServerPortListener.class);
 

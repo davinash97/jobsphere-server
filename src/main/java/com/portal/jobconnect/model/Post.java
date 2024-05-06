@@ -1,22 +1,21 @@
 package com.portal.jobconnect.model;
 
 import com.portal.jobconnect.utils.Constants;
-import javax.persistence.Table;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "posts")
 public class Post implements Constants {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String postId;
+	private UUID postId;
 
 	@Column(nullable = false)
 	private String title;
@@ -32,10 +31,10 @@ public class Post implements Constants {
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
-	private String createdAt;
+	private LocalDateTime createdAt;
 
 	@LastModifiedDate
-	private String updatedAt;
+	private LocalDateTime updatedAt;
 
 	@Column(nullable = false)
 	private List<String> idsOfAppliedApplicants;
@@ -43,15 +42,16 @@ public class Post implements Constants {
 	public Post() {
     }
 
-	public Post(String postId, String title, String description, String location) {
+	public Post(UUID postId, String title, String description, String location) {
 		this.postId = postId;
 		this.title = title;
 		this.location = location;
 		this.description = description;
-		createdAt = LocalDateTime.now().format(formatter);
+		this.createdAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
     }
 
-	public String getPostId() {
+	public UUID getPostId() {
 		return postId;
 	}
 
@@ -80,15 +80,15 @@ public class Post implements Constants {
 	}
 
 	public String getCreatedAt() {
-		return createdAt;
+		return createdAt.format(formatter);
 	}
 
 	public String getUpdatedAt() {
-		return updatedAt;
+		return updatedAt.format(formatter);
 	}
 
 	public void setUpdatedAt() {
-		updatedAt = LocalDateTime.now().format(formatter);
+		updatedAt = LocalDateTime.now();
 	}
 
 	public Long getNumOfApplicants() {

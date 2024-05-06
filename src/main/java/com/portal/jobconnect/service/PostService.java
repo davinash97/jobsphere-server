@@ -6,24 +6,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 public class PostService {
 
     private static final Logger logger = LoggerFactory.getLogger(PostService.class);
-	HashMap<String, Object> postMap = new HashMap<>();
+	HashMap<UUID, Object> postMap = new HashMap<>();
 
-	public boolean createPost(String postId, String title, String description, String location) {
+	public boolean createPost(UUID postId, String title, String description, String location) {
 
 		try {
 			if (postId == null || title == null || description == null || location == null
-					|| postId.isEmpty() || title.isEmpty() || description.isEmpty() || location.isEmpty())
+					|| postId.toString().isEmpty() || title.isEmpty() || description.isEmpty() || location.isEmpty())
 				return false;
 
 			if (postMap.containsKey(postId)) {
-				return postMap.containsKey(postId); // Chances are too low to reach here but still
+				return postMap.containsKey(postId); // Chances too low to reach here but still
 			}
-
             Post post = new Post(postId, title, description, location);
 
 			postMap.put(postId, post);
@@ -35,14 +35,14 @@ public class PostService {
 		}
 	}
 
-	public Post readPost(String postId) {
+	public Post readPost(UUID postId) {
 		if (!postMap.containsKey(postId))
 			return null;
 
 		return (Post) postMap.get(postId);
 	}
 
-	public boolean updatePost(String postId, String title, String description, String location) {
+	public boolean updatePost(UUID postId, String title, String description, String location) {
 
 		if (!postMap.containsKey(postId))
 			return false;
@@ -67,7 +67,7 @@ public class PostService {
 		}
 	}
 
-	public boolean deletePost(String postId) {
+	public boolean deletePost(UUID postId) {
 		if (!postMap.containsKey(postId))
 			return false;
 		postMap.remove(postId);

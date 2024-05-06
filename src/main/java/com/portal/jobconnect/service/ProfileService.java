@@ -38,11 +38,11 @@ public class ProfileService {
 		return (Profile) profileMap.get(profileId);
 	}
 
-	public void updateProfile(String profileId, String name, String gender, String role, String email,
+	public boolean updateProfile(String profileId, String name, String gender, String role, String email,
 							  Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
 
 		if (!profileMap.containsKey(profileId))
-			return;
+			return false;
 
 		try {
 			Profile existingProfile = readProfile(profileId);
@@ -76,8 +76,10 @@ public class ProfileService {
 				existingProfile.setOrganizationName(organizationName);
 
 			profileMap.put(profileId, existingProfile);
+			return true;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			return false;
 		}
 	}
 

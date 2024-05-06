@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 @RestController
 public class PostController implements Constants {
 
@@ -21,7 +22,7 @@ public class PostController implements Constants {
 
 	private ResponseObject<?> response;
 
-	@PostMapping(DEFAULT_EMPLOYER_URI + "/post/create")
+	@PostMapping(DEFAULT_POST_URI + "/create")
 	public ResponseEntity<ResponseObject<?>> createPost(
 			@RequestParam String title,
 			@RequestParam String description,
@@ -34,8 +35,8 @@ public class PostController implements Constants {
 
 			UUID uuid = UUID.randomUUID();
 
-			if (post.createPost(uuid.toString(), title, description, location)) {
-                logger.info("Successfully created post with Id:\t{}", uuid);
+			if (post.createPost(uuid, title, description, location)) {
+				logger.debug("Successfully created post with Id:\t{}", uuid);
 			}
 			return readPost(uuid.toString());
 		} catch (Exception e) {
@@ -46,18 +47,18 @@ public class PostController implements Constants {
 		}
 	}
 
-	@GetMapping(DEFAULT_EMPLOYER_URI + "/post/read")
+	@GetMapping(DEFAULT_POST_URI + "/read")
 	public ResponseEntity<ResponseObject<?>> readPost(String postId) {
 		try {
 			if (postId.length() != 36) {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
-			Post result = post.readPost(postId);
+			Post result = post.readPost(UUID.fromString(postId));
 			response = (result == null)
 					? new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "bad", "id doesn't exist")
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
-			logger.info(response.toString());
+			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
@@ -67,9 +68,9 @@ public class PostController implements Constants {
 		}
 	}
 
-	@PutMapping(DEFAULT_EMPLOYER_URI + "/post/update")
+	@PutMapping(DEFAULT_POST_URI + "/update")
 	public ResponseEntity<ResponseObject<?>> updatePost(
-			@RequestParam String postId,
+			@RequestParam UUID postId,
 			@RequestParam(required = false) String title,
 			@RequestParam(required = false) String description,
 			@RequestParam(required = false) String location) {
@@ -81,8 +82,10 @@ public class PostController implements Constants {
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			post.updatePost(postId, title, description, location);
-			return readPost(postId);
+			if (post.updatePost(postId, title, description, location)) {
+				logger.debug("Successfully updated post with Id:\t{}", postId);
+			}
+			return readPost(postId.toString());
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occurred");
@@ -91,13 +94,13 @@ public class PostController implements Constants {
 		}
 	}
 
-	@DeleteMapping(DEFAULT_EMPLOYER_URI + "/post/delete")
-	public ResponseEntity<ResponseObject<?>> deletePost(@RequestParam String postId) {
+	@DeleteMapping(DEFAULT_POST_URI + "/delete")
+	public ResponseEntity<ResponseObject<?>> deletePost(@RequestParam UUID postId) {
 		try {
 			response = (post.deletePost(postId))
 					? new ResponseObject<>(HttpStatus.OK.value(), "ok")
 					: new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "not found");
-			logger.info(response.toString());
+			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",

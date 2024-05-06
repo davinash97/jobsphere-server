@@ -4,6 +4,8 @@ import com.portal.jobconnect.model.Post;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +13,7 @@ public class PostServiceTest {
 
 	private PostService postService;
 
-	String postId;
+	UUID postId = UUID.randomUUID();
 	String title;
 	String description;
 	String location;
@@ -24,7 +26,6 @@ public class PostServiceTest {
 	@Test
 	public void testCreatePost_EmptyParameters() {
 
-		postId = "";
 		title = "";
 		description = "";
 		location = "";
@@ -37,7 +38,6 @@ public class PostServiceTest {
 
 	@Test
 	public void testCreatePost() {
-		postId = "1";
 		title = "test title";
 		description = "test description";
 		location = "test location";
@@ -50,7 +50,6 @@ public class PostServiceTest {
 	@Test
 	public void testCreatePost_Success() {
 
-		postId = "1";
 		title = "Test Title";
 		description = "Test Description";
 		location = "Test Location";
@@ -64,7 +63,6 @@ public class PostServiceTest {
 	@Test
 	public void testReadExistingPost() {
 
-		postId = "1";
 		title = "Test Title";
 		description = "Test Description";
 		location = "Test Location";
@@ -82,7 +80,6 @@ public class PostServiceTest {
 
 	@Test
 	public void testReadNonExistingPost() {
-		postId = "1";
 		Post readPost = postService.readPost(postId);
 
 		assertNull(readPost);
@@ -90,7 +87,6 @@ public class PostServiceTest {
 
 	@Test
 	public void testUpdatePost() {
-		postId = "1";
 		title = "Test Title";
 		description = "Test Description";
 		location = "Test Location";
@@ -104,7 +100,6 @@ public class PostServiceTest {
 
 	@Test
 	public void testUpdatePost_NonExisting() {
-		postId = "1";
 		title = "Test Title";
 		description = "Test Description";
 		location = "Test Location";
@@ -114,7 +109,6 @@ public class PostServiceTest {
 
 	@Test
 	public void testDeletePost() {
-		postId = "1";
 		title = "Test Title";
 		description = "Test Description";
 		location = "Test Location";
@@ -125,7 +119,7 @@ public class PostServiceTest {
 
 	@Test
 	public void testDeletePost_NonExisting() {
-		postId = "1";
+		postId = UUID.randomUUID();
 
 		assertFalse(postService.deletePost(postId));
 	}

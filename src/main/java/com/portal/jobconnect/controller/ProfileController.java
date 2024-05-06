@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@SuppressWarnings("ALL")
 @RestController
 public class ProfileController implements Constants {
 
@@ -37,7 +38,7 @@ public class ProfileController implements Constants {
 			UUID profileId = UUID.randomUUID();
 
 			if (profile.createProfile(profileId.toString(), name, gender, role, email, phone)) {
-                logger.info("Successfully profile created for Id:\t{}", profileId);
+				logger.debug("Successfully profile created for Id:\t{}", profileId);
 			}
 
 			return readProfile(profileId.toString());
@@ -61,7 +62,7 @@ public class ProfileController implements Constants {
 			response = (result == null)
 					? new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
-			logger.info(response.toString());
+			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
@@ -88,10 +89,11 @@ public class ProfileController implements Constants {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad",
 						"At least one of name, role, gender, email, or organization must be provided.");
 				return ResponseEntity.badRequest().body(response);
-			}	
+			}
 
-			profile.updateProfile(profileId, name, gender, role, email, phone, numOfPosts, numOfApplicants,
-					organizationName);
+			if (profile.updateProfile(profileId, name, gender, role, email, phone, numOfPosts, numOfApplicants, organizationName)) {
+				logger.debug("Successfully profile updated for Id:\t{}", profileId);
+			}
 
 			return readProfile(profileId);
 		} catch (Exception e) {
@@ -107,7 +109,7 @@ public class ProfileController implements Constants {
 		try {
 			response = new ResponseObject<>(HttpStatus.OK.value(), "ok",
 					profile.deleteProfile(profileId));
-			logger.info(response.toString());
+			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
