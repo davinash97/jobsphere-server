@@ -2,13 +2,13 @@
 
 ## Overview
 
-This repository houses the source code for a full-stack job portal application built with React for the frontend and Spring Boot, Hibernate, and MongoDB for the backend. It offers a user-friendly platform for job seekers and employers to connect effectively.
+This repository houses the source code for a full-stack job portal application built with React for the Front end and Spring Boot, Hibernate, and MongoDB for the Back end. It offers a user-friendly platform for job seekers and employers to connect effectively.
 
 ## Features
 
 ### For Job Seekers (Employee):
 1. Create and manage profiles
-2. Search for jobs based on various criteria (location, keyword, etc.)
+2. Search for jobs based on various criteria (job description, location, keyword, etc.)
 3. Apply for available positions
 4. Track application status
 
@@ -22,7 +22,7 @@ This repository houses the source code for a full-stack job portal application b
 2. Backend: Spring Boot, Java, Hibernate
 3. Database: PostgreSQL
 
-## Application Strucuture
+## Application Structure
 ```
 src/main/java/com
 └── portal
