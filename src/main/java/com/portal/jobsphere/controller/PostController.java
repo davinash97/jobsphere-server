@@ -1,9 +1,9 @@
-package com.portal.jobconnect.controller;
+package com.portal.jobsphere.controller;
 
-import com.portal.jobconnect.model.Post;
-import com.portal.jobconnect.model.ResponseObject;
-import com.portal.jobconnect.service.PostService;
-import com.portal.jobconnect.utils.Constants;
+import com.portal.jobsphere.model.Post;
+import com.portal.jobsphere.model.ResponseObject;
+import com.portal.jobsphere.service.PostService;
+import com.portal.jobsphere.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

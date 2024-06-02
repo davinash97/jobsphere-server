@@ -1,4 +1,4 @@
-package com.portal.jobconnect.posts;
+package com.portal.jobsphere.posts;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

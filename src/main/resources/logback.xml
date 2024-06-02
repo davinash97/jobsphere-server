@@ -30,7 +30,7 @@
 		</layout>
 	</appender>
 
-	<logger name="com.portal.jobconnect" level="debug" additivity="false">
+	<logger name="com.portal.jobsphere" level="debug" additivity="false">
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FILE-ROLLING" />
 	</logger>

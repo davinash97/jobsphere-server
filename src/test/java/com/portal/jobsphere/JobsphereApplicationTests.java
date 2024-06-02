@@ -1,12 +1,12 @@
-package com.portal.jobconnect;
+package com.portal.jobsphere;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JobconnectApplicationTests {
+class JobsphereApplicationTests {
 
 	// @Autowired
-	// private JobconnectApplication employerController;
+	// private JobsphereApplication employerController;
 
 	// @Test
 	// void testMissingParametersPostCreate() {

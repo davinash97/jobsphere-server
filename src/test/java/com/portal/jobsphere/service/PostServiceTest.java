@@ -1,6 +1,6 @@
-package com.portal.jobconnect.service;
+package com.portal.jobsphere.service;
 
-import com.portal.jobconnect.model.Post;
+import com.portal.jobsphere.model.Post;
 import org.junit.Before;
 import org.junit.Test;
 

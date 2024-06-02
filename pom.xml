@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.portal</groupId>
-	<artifactId>jobconnect</artifactId>
+	<artifactId>jobsphere</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>job-connect</name>
 	<description>A user-friendly platform for job seekers and employers to connect effectively</description>
@@ -66,7 +66,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.portal.jobconnect.JobconnectApplication</mainClass>
+							<mainClass>com.portal.jobsphere.JobsphereApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

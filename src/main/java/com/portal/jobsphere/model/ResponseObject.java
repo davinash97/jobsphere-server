@@ -1,4 +1,4 @@
-package com.portal.jobconnect.model;
+package com.portal.jobsphere.model;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 

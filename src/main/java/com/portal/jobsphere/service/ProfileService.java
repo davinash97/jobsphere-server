@@ -1,8 +1,8 @@
-package com.portal.jobconnect.service;
+package com.portal.jobsphere.service;
 
-import com.portal.jobconnect.enums.Gender;
-import com.portal.jobconnect.enums.Role;
-import com.portal.jobconnect.model.Profile;
+import com.portal.jobsphere.enums.Gender;
+import com.portal.jobsphere.enums.Role;
+import com.portal.jobsphere.model.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

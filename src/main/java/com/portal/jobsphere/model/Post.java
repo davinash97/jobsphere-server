@@ -1,6 +1,6 @@
-package com.portal.jobconnect.model;
+package com.portal.jobsphere.model;
 
-import com.portal.jobconnect.utils.Constants;
+import com.portal.jobsphere.utils.Constants;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

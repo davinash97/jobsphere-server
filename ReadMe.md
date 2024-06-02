@@ -1,6 +1,6 @@
-# Online Job Portal - Full Stack Application
+# Online Job Portal – Full Stack Application
 <!-- TOC -->
-* [Online Job Portal - Full Stack Application](#online-job-portal---full-stack-application)
+* [Online Job Portal – Full Stack Application](#online-job-portal--full-stack-application)
   * [Overview](#overview)
   * [Features](#features)
     * [For Job Seekers (Employee)](#for-job-seekers-employee)
@@ -38,7 +38,7 @@ and employers to connect effectively.
 src/main/java
 └── com
     └── portal
-        └── jobconnect
+        └── jobsphere
             ├── application
             │   └── ServerPortListener.java
             ├── controller
@@ -48,7 +48,7 @@ src/main/java
             ├── enums
             │   ├── Gender.java
             │   └── Role.java
-            ├── JobconnectApplication.java
+            ├── JobsphereApplication.java
             ├── model
             │   ├── Post.java
             │   ├── Profile.java
@@ -63,4 +63,4 @@ src/main/java
 ```
 
 # Credits
-Credits goes to [Niharika](https://github.com/Niharika2803) (a.k.a. NightFlick) for project idea, name and other features suggestion.
+Credits to [Niharika](https://github.com/Niharika2803) (a.k.a. NightFlick) for project idea and other features suggestion(s).

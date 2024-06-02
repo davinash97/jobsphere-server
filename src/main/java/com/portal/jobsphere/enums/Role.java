@@ -1,4 +1,4 @@
-package com.portal.jobconnect.enums;
+package com.portal.jobsphere.enums;
 
 public enum Role {
 	POSTER,

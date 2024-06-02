@@ -1,11 +1,11 @@
-package com.portal.jobconnect;
+package com.portal.jobsphere;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JobconnectApplication {
+public class JobsphereApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(JobconnectApplication.class, args);
+		SpringApplication.run(JobsphereApplication.class, args);
 	}
 }

@@ -1,6 +1,6 @@
-package com.portal.jobconnect.controller;
+package com.portal.jobsphere.controller;
 
-import com.portal.jobconnect.utils.Constants;
+import com.portal.jobsphere.utils.Constants;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;

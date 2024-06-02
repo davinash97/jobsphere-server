@@ -1,4 +1,4 @@
-package com.portal.jobconnect.utils;
+package com.portal.jobsphere.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

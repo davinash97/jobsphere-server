@@ -1,4 +1,4 @@
-package com.portal.jobconnect.utils;
+package com.portal.jobsphere.utils;
 
 import java.time.format.DateTimeFormatter;
 

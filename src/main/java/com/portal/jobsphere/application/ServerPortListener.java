@@ -1,4 +1,4 @@
-package com.portal.jobconnect.application;
+package com.portal.jobsphere.application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

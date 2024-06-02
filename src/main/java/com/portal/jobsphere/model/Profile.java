@@ -1,7 +1,7 @@
-package com.portal.jobconnect.model;
+package com.portal.jobsphere.model;
 
-import com.portal.jobconnect.enums.Gender;
-import com.portal.jobconnect.enums.Role;
+import com.portal.jobsphere.enums.Gender;
+import com.portal.jobsphere.enums.Role;
 
 @SuppressWarnings("unused")
 public class Profile {
