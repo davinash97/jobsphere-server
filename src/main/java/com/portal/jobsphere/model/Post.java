@@ -1,20 +1,21 @@
 package com.portal.jobsphere.model;
 
-import com.portal.jobsphere.utils.Constants;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@SuppressWarnings("unused")
+import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import com.portal.jobsphere.utils.Constants;
+
 @Entity
-@Table(name = "posts")
+@Table(name="post")
 public class Post implements Constants {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID postId;
 
 	@Column(nullable = false)
@@ -26,29 +27,32 @@ public class Post implements Constants {
 	@Column(nullable = false)
 	private String description;
 
-	@Column(nullable = false)
-	private Long numOfApplicants;
+	@Column(name = "num_of_applicants")
+	private Integer numOfApplicants;
 
 	@CreatedDate
-	@Column(nullable = false, updatable = false)
+	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
 	@LastModifiedDate
+	@Column(name="updated_at")
 	private LocalDateTime updatedAt;
 
-	@Column(nullable = false)
+	@Column(name = "total_applicants", nullable = false)
+	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> idsOfAppliedApplicants;
 
 	public Post() {
 	}
 
-	public Post(UUID postId, String title, String description, String location) {
-		this.postId = postId;
+	public Post(String title, String description, String location) {
 		this.title = title;
 		this.location = location;
 		this.description = description;
+		this.numOfApplicants = 0;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
+		this.idsOfAppliedApplicants = new ArrayList<>();
 	}
 
 	public UUID getPostId() {
@@ -91,11 +95,11 @@ public class Post implements Constants {
 		updatedAt = LocalDateTime.now();
 	}
 
-	public Long getNumOfApplicants() {
+	public Integer getNumOfApplicants() {
 		return numOfApplicants;
 	}
 
-	public void setNumOfApplicants(Long numOfApplicants) {
+	public void setNumOfApplicants(Integer numOfApplicants) {
 		this.numOfApplicants = numOfApplicants;
 	}
 

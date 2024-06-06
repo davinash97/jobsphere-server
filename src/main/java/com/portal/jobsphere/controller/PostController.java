@@ -1,23 +1,33 @@
 package com.portal.jobsphere.controller;
 
-import com.portal.jobsphere.model.Post;
-import com.portal.jobsphere.model.ResponseObject;
-import com.portal.jobsphere.service.PostService;
-import com.portal.jobsphere.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.portal.jobsphere.model.Post;
+import com.portal.jobsphere.model.ResponseObject;
+import com.portal.jobsphere.service.PostService;
+import com.portal.jobsphere.utils.Constants;
 
 import java.util.UUID;
 
-@SuppressWarnings("unused")
 @RestController
 public class PostController implements Constants {
 
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
-	private final PostService post = new PostService();
+
+	@Autowired
+	private PostService postService;
+
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_POST_URI + "/create")
@@ -31,12 +41,13 @@ public class PostController implements Constants {
 				return ResponseEntity.ok(response);
 			}
 
-			UUID uuid = UUID.randomUUID();
-
-			if (post.createPost(uuid, title, description, location)) {
-				logger.debug("Successfully created post with Id:\t{}", uuid);
+			Post post = postService.createPost( title, description, location);
+			if (post != null) {
+				return readPost(post.getPostId());
 			}
-			return readPost(uuid.toString());
+
+			return null;
+
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occurred");
@@ -46,16 +57,18 @@ public class PostController implements Constants {
 	}
 
 	@GetMapping(DEFAULT_POST_URI + "/read")
-	public ResponseEntity<ResponseObject<?>> readPost(String postId) {
+	public ResponseEntity<ResponseObject<?>> readPost(UUID postId) {
 		try {
-			if (postId.length() != 36) {
+			if (postId.toString().length() != 36) {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
-			Post result = post.readPost(UUID.fromString(postId));
+
+			Post result = postService.readPost(postId);
 			response = (result == null)
 					? new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "bad", "id doesn't exist")
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
+
 			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
@@ -80,10 +93,10 @@ public class PostController implements Constants {
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			if (post.updatePost(postId, title, description, location)) {
+			if (postService.updatePost(postId, title, description, location)) {
 				logger.debug("Successfully updated post with Id:\t{}", postId);
 			}
-			return readPost(postId.toString());
+			return readPost(postId);
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occurred");
@@ -95,7 +108,7 @@ public class PostController implements Constants {
 	@DeleteMapping(DEFAULT_POST_URI + "/delete")
 	public ResponseEntity<ResponseObject<?>> deletePost(@RequestParam UUID postId) {
 		try {
-			response = (post.deletePost(postId))
+			response = (postService.deletePost(postId))
 					? new ResponseObject<>(HttpStatus.OK.value(), "ok")
 					: new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "not found");
 			logger.debug(response.toString());

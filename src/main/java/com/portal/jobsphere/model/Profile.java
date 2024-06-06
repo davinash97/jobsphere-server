@@ -3,7 +3,6 @@ package com.portal.jobsphere.model;
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
 
-@SuppressWarnings("unused")
 public class Profile {
 
 	// Common
