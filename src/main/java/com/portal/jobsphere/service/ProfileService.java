@@ -3,44 +3,40 @@ package com.portal.jobsphere.service;
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
 import com.portal.jobsphere.model.Profile;
+import com.portal.jobsphere.repository.ProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 public class ProfileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
 	Profile profile;
-	HashMap<String, Object> profileMap = new HashMap<>();
+
+	@Autowired
+	private ProfileRepository profileRepository;
 
 	public ProfileService() {
 	}
 
-	public boolean createProfile(String profileId, String name, String gender, String role, String email, Long phone) {
-		if (profileMap.containsKey(profileId))
-			return false;
+	public Profile createProfile(String name, String gender, String role, String email, Long phone) {
 		Role roleEnum = Role.valueOf(role.toUpperCase());
 		Gender genderEnum = Gender.valueOf(gender.toUpperCase());
-		profile = new Profile(profileId, name, genderEnum, roleEnum, email, phone);
-		profileMap.put(profileId, profile);
-		return true;
+		profile = new Profile(name, genderEnum, roleEnum, email, phone);
+		profileRepository.save(profile);
+		return readProfile(profile.getProfileId());
 	}
 
-	public Profile readProfile(String profileId) {
-		if (!profileMap.containsKey(profileId))
-			return null;
-
-		return (Profile) profileMap.get(profileId);
+	public Profile readProfile(UUID profileId) {
+		return profileRepository.findById(profileId).orElse(null);
 	}
 
-	public boolean updateProfile(String profileId, String name, String gender, String role, String email,
+	public boolean updateProfile(UUID profileId, String name, String gender, String role, String email,
 								 Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
-
-		if (!profileMap.containsKey(profileId))
-			return false;
 
 		try {
 			Profile existingProfile = readProfile(profileId);
@@ -73,7 +69,7 @@ public class ProfileService {
 			if (organizationName != null)
 				existingProfile.setOrganizationName(organizationName);
 
-			profileMap.put(profileId, existingProfile);
+			profileRepository.save(existingProfile);
 			return true;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -81,10 +77,10 @@ public class ProfileService {
 		}
 	}
 
-	public boolean deleteProfile(String profileId) {
-		if (!profileMap.containsKey(profileId))
+	public boolean deleteProfile(UUID profileId) {
+		if (!profileRepository.existsById(profileId))
 			return false;
-		profileMap.remove(profileId);
+		profileRepository.deleteById(profileId);
 		return true;
 	}
 }

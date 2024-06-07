@@ -6,6 +6,7 @@ import com.portal.jobsphere.service.ProfileService;
 import com.portal.jobsphere.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,10 @@ import java.util.UUID;
 public class ProfileController implements Constants {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
-	private final ProfileService profile = new ProfileService();
+
+	@Autowired
+	private ProfileService profileService;
+
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_PROFILE_URI + "/create")
@@ -32,14 +36,13 @@ public class ProfileController implements Constants {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "bad request");
 				return ResponseEntity.ok(response);
 			}
-
-			UUID profileId = UUID.randomUUID();
-
-			if (profile.createProfile(profileId.toString(), name, gender, role, email, phone)) {
-				logger.debug("Successfully profile created for Id:\t{}", profileId);
+			Profile profile = profileService.createProfile(name, gender, role, email, phone);
+			if (profile != null) {
+				logger.debug("Successfully profile created for Id:\t{}", profile.getProfileId());
+				return readProfile(profile.getProfileId());
 			}
+			return null;
 
-			return readProfile(profileId.toString());
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
 					"internal error occurred");
@@ -49,14 +52,14 @@ public class ProfileController implements Constants {
 	}
 
 	@GetMapping(DEFAULT_PROFILE_URI + "/read")
-	public ResponseEntity<ResponseObject<?>> readProfile(String profileId) {
+	public ResponseEntity<ResponseObject<?>> readProfile(UUID profileId) {
 		try {
-			if (profileId.length() != 36) {
+			if (profileId.toString().length() != 36) {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "invalid id");
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			Profile result = profile.readProfile(profileId);
+			Profile result = profileService.readProfile(profileId);
 			response = (result == null)
 					? new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
@@ -72,7 +75,7 @@ public class ProfileController implements Constants {
 
 	@PutMapping(DEFAULT_PROFILE_URI + "/update")
 	public ResponseEntity<ResponseObject<?>> updateProfile(
-			@RequestParam String profileId,
+			@RequestParam UUID profileId,
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) String role,
 			@RequestParam(required = false) String gender,
@@ -89,7 +92,7 @@ public class ProfileController implements Constants {
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			if (profile.updateProfile(profileId, name, gender, role, email, phone, numOfPosts, numOfApplicants, organizationName)) {
+			if (profileService.updateProfile(profileId, name, gender, role, email, phone, numOfPosts, numOfApplicants, organizationName)) {
 				logger.debug("Successfully profile updated for Id:\t{}", profileId);
 			}
 
@@ -103,10 +106,10 @@ public class ProfileController implements Constants {
 	}
 
 	@DeleteMapping(DEFAULT_PROFILE_URI + "/delete")
-	public ResponseEntity<ResponseObject<?>> deleteProfile(@RequestParam String profileId) {
+	public ResponseEntity<ResponseObject<?>> deleteProfile(@RequestParam UUID profileId) {
 		try {
 			response = new ResponseObject<>(HttpStatus.OK.value(), "ok",
-					profile.deleteProfile(profileId));
+					profileService.deleteProfile(profileId));
 			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {

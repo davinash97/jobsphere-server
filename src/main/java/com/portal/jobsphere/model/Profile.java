@@ -2,11 +2,17 @@ package com.portal.jobsphere.model;
 
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
+import jakarta.persistence.*;
 
+import java.util.UUID;
+
+@Entity
 public class Profile {
 
 	// Common
-	private final String profileId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID profileId;
 	private String name;
 	private Gender gender;
 	private Role role;
@@ -14,19 +20,29 @@ public class Profile {
 	private Long phone;
 
 	// Employee
+	@Column(name = "saved_jobs")
 	private Long savedJobs;
 	private Integer experience;
+
+	@Column(name = "applied_jobs")
 	private Long appliedJobs;
+
 	private String expertise;
 
 	// Employer
+	@Column(name = "total_posts")
 	private Integer numOfPosts;
+
+	@Column(name = "total_applicants")
 	private Long numOfApplicants;
+
+	@Column(name = "organization")
 	private String organizationName;
 
+
+	public Profile() {}
 	// Common
-	public Profile(String profileId, String name, Gender gender, Role role, String email, Long phone) {
-		this.profileId = profileId;
+	public Profile(String name, Gender gender, Role role, String email, Long phone) {
 		this.name = name;
 		this.gender = gender;
 		this.role = role;
@@ -34,7 +50,7 @@ public class Profile {
 		this.phone = phone;
 	}
 
-	public String getProfileId() {
+	public UUID getProfileId() {
 		return profileId;
 	}
 
