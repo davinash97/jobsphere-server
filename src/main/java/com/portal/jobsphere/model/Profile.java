@@ -1,12 +1,22 @@
 package com.portal.jobsphere.model;
 
-import com.portal.jobsphere.enums.Gender;
-import com.portal.jobsphere.enums.Role;
-import jakarta.persistence.*;
-
+import java.util.List;
 import java.util.UUID;
 
+import com.portal.jobsphere.enums.Gender;
+import com.portal.jobsphere.enums.Role;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 @Entity
+@Table(name="profile")
 public class Profile {
 
 	// Common
@@ -30,6 +40,10 @@ public class Profile {
 	private String expertise;
 
 	// Employer
+	@Column(name = "all_posts")
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<UUID> allPosts;
+	
 	@Column(name = "total_posts")
 	private Integer numOfPosts;
 
@@ -41,6 +55,7 @@ public class Profile {
 
 
 	public Profile() {}
+	
 	// Common
 	public Profile(String name, Gender gender, Role role, String email, Long phone) {
 		this.name = name;
@@ -48,6 +63,7 @@ public class Profile {
 		this.role = role;
 		this.email = email;
 		this.phone = phone;
+		this.numOfPosts = 0;
 	}
 
 	public UUID getProfileId() {
@@ -148,6 +164,10 @@ public class Profile {
 
 	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
+	}
+
+	public List<UUID> getAllPosts() {
+		return allPosts;
 	}
 
 }

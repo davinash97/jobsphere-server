@@ -22,6 +22,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="post")
 public class Post implements Constants {
+
+	@Column(nullable = false)
+	private UUID profileId;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID postId;
@@ -61,7 +65,8 @@ public class Post implements Constants {
 	public Post() {
 	}
 
-	public Post(String title, String description, List<String> requirements, List<String> responsibilities, String location) {
+	public Post(UUID profileId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
+		this.profileId = profileId;
 		this.title = title;
 		this.description = description;
 		this.requirements = requirements;
@@ -73,6 +78,10 @@ public class Post implements Constants {
 		this.idsOfAppliedApplicants = new ArrayList<>();
 	}
 
+	public UUID getProfileId() {
+		return profileId;
+	}
+	
 	public UUID getPostId() {
 		return postId;
 	}

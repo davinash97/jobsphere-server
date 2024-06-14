@@ -1,15 +1,16 @@
 package com.portal.jobsphere.service;
 
-import com.portal.jobsphere.enums.Gender;
-import com.portal.jobsphere.enums.Role;
-import com.portal.jobsphere.model.Profile;
-import com.portal.jobsphere.repository.ProfileRepository;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import com.portal.jobsphere.enums.Gender;
+import com.portal.jobsphere.enums.Role;
+import com.portal.jobsphere.model.Profile;
+import com.portal.jobsphere.repository.ProfileRepository;
 
 @Service
 public class ProfileService {
@@ -23,9 +24,17 @@ public class ProfileService {
 	public ProfileService() {
 	}
 
+
+	// CRUD Operations
 	public Profile createProfile(String name, String gender, String role, String email, Long phone) {
-		Role roleEnum = Role.valueOf(role.toUpperCase());
-		Gender genderEnum = Gender.valueOf(gender.toUpperCase());
+		Gender genderEnum = null;
+		Role roleEnum = null;
+		if(gender != null)
+			genderEnum = Gender.valueOf(gender.toUpperCase());
+		
+		if(role != null)
+			roleEnum = Role.valueOf(role.toUpperCase());
+
 		profile = new Profile(name, genderEnum, roleEnum, email, phone);
 		profileRepository.save(profile);
 		return readProfile(profile.getProfileId());
@@ -83,4 +92,10 @@ public class ProfileService {
 		profileRepository.deleteById(profileId);
 		return true;
 	}
+
+	// Others
+	public boolean profileIdExists(UUID profileId) {
+		return profileRepository.existsById(profileId);
+	}
+
 }

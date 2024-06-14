@@ -19,9 +19,12 @@ public class PostService {
 	private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 
 	@Autowired
+	private ProfileService profileService;
+
+	@Autowired
 	private PostRepository postRepository;
 
-	public Post createPost(String title, String description, List<String> requirements, List<String> responsibilities, String location) {
+	public Post createPost(UUID profileId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 
 		try {
 			if (title == null || description == null || location == null
@@ -29,11 +32,14 @@ public class PostService {
 				return null;
 			}
 
-			Post post = new Post(title, description, requirements, responsibilities, location);
+			if (profileService.profileIdExists(profileId)) {
+				Post post = new Post(profileId, title, description, requirements, responsibilities, location);
+				postRepository.save(post);
+				return readPost(post.getPostId());
+			}
 
-			postRepository.save(post);
+			return null;
 
-			return readPost(post.getPostId());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return null;

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,8 +31,9 @@ public class PostController implements Constants {
 
 	private ResponseObject<?> response;
 
-	@PostMapping(DEFAULT_POST_URI + "/create")
+	@PostMapping(DEFAULT_POST_URI + "/{profileId}" + "/create")
 	public ResponseEntity<ResponseObject<?>> createPost(
+			@PathVariable UUID profileId,
 			@RequestParam String title,
 			@RequestParam String description,
 			@RequestParam List<String> requirements,
@@ -42,13 +44,14 @@ public class PostController implements Constants {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "Bad Request");
 				return ResponseEntity.ok(response);
 			}
-
-			Post post = postService.createPost(title, description, requirements, responsibilities, location);
+			
+			Post post = postService.createPost(profileId, title, description, requirements, responsibilities, location);
 			if (post != null) {
 				return readPost(post.getPostId());
 			}
-
-			return null;
+			
+			response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "either that profile Id is invalid, or doesn't exist.");
+			return ResponseEntity.ok(response);
 
 		} catch (Exception e) {
 			response = new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "bad",
