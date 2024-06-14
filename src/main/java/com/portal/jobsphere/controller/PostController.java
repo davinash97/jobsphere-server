@@ -1,7 +1,11 @@
 package com.portal.jobsphere.controller;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,14 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.portal.jobsphere.model.Post;
 import com.portal.jobsphere.model.ResponseObject;
 import com.portal.jobsphere.service.PostService;
 import com.portal.jobsphere.utils.Constants;
-
-import java.util.UUID;
 
 @RestController
 public class PostController implements Constants {
@@ -34,6 +34,8 @@ public class PostController implements Constants {
 	public ResponseEntity<ResponseObject<?>> createPost(
 			@RequestParam String title,
 			@RequestParam String description,
+			@RequestParam List<String> requirements,
+			@RequestParam List<String> responsibilities,
 			@RequestParam String location) {
 		try {
 			if (title.isEmpty() || description.isEmpty() || location.isEmpty()) {
@@ -41,7 +43,7 @@ public class PostController implements Constants {
 				return ResponseEntity.ok(response);
 			}
 
-			Post post = postService.createPost( title, description, location);
+			Post post = postService.createPost(title, description, requirements, responsibilities, location);
 			if (post != null) {
 				return readPost(post.getPostId());
 			}
@@ -84,16 +86,18 @@ public class PostController implements Constants {
 			@RequestParam UUID postId,
 			@RequestParam(required = false) String title,
 			@RequestParam(required = false) String description,
+			@RequestParam List<String> requirements,
+			@RequestParam List<String> responsibilities,
 			@RequestParam(required = false) String location) {
 
 		try {
-			if (title == null && description == null && location == null) {
+			if (title == null && description == null && location == null && requirements == null && responsibilities == null) {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad",
-						"At least one of title, description, or location must be provided.");
+						"At least one of title, description, requirementes, responsibilities or location must be provided.");
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			if (postService.updatePost(postId, title, description, location)) {
+			if (postService.updatePost(postId, title, description, responsibilities, requirements, location)) {
 				logger.debug("Successfully updated post with Id:\t{}", postId);
 			}
 			return readPost(postId);

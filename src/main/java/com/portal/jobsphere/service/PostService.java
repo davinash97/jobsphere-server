@@ -1,15 +1,16 @@
 package com.portal.jobsphere.service;
 
-import com.portal.jobsphere.model.Post;
+import java.util.List;
+import java.util.UUID;
 
-import com.portal.jobsphere.repository.PostRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import com.portal.jobsphere.model.Post;
+import com.portal.jobsphere.repository.PostRepository;
 
 @Service
 @Transactional
@@ -20,14 +21,15 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 
-	public Post createPost(String title, String description, String location) {
+	public Post createPost(String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 
 		try {
 			if (title == null || description == null || location == null
-					|| title.isEmpty() || description.isEmpty() || location.isEmpty())
+					|| title.isEmpty() || description.isEmpty() || location.isEmpty()) {
 				return null;
+			}
 
-			Post post = new Post(title, description, location);
+			Post post = new Post(title, description, requirements, responsibilities, location);
 
 			postRepository.save(post);
 
@@ -42,22 +44,34 @@ public class PostService {
 		return (Post) postRepository.findById(postId).orElse(null);
 	}
 
-	public boolean updatePost(UUID postId, String title, String description, String location) {
+	public boolean updatePost(UUID postId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 
 		try {
 			Post existingPost = postRepository.findById(postId).orElse(null);
 
-			if(existingPost == null)
+			if (existingPost == null) {
 				return false;
+			}
 
-			if (title != null)
+			if (title != null) {
 				existingPost.setTitle(title);
+			}
 
-			if (description != null)
+			if (description != null) {
 				existingPost.setDescription(description);
+			}
 
-			if (location != null)
+			if (requirements.isEmpty()) {
+				existingPost.setRequirements(requirements);
+			}
+
+			if (responsibilities.isEmpty()) {
+				existingPost.setResponsibilities(responsibilities);
+			}
+
+			if (location != null) {
 				existingPost.setLocation(location);
+			}
 
 			existingPost.setUpdatedAt();
 			postRepository.save(existingPost);
@@ -69,10 +83,10 @@ public class PostService {
 	}
 
 	public boolean deletePost(UUID postId) {
-		if (!postRepository.existsById(postId))
+		if (!postRepository.existsById(postId)) {
 			return false;
+		}
 		postRepository.deleteById(postId);
-//		postRepository.delete();
 		return true;
 	}
 }

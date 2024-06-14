@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.portal.jobsphere.utils.Constants;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name="post")
@@ -26,6 +34,14 @@ public class Post implements Constants {
 
 	@Column(nullable = false)
 	private String description;
+
+	@Column
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> requirements;
+
+	@Column
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> responsibilities;
 
 	@Column(name = "num_of_applicants")
 	private Integer numOfApplicants;
@@ -45,10 +61,12 @@ public class Post implements Constants {
 	public Post() {
 	}
 
-	public Post(String title, String description, String location) {
+	public Post(String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 		this.title = title;
-		this.location = location;
 		this.description = description;
+		this.requirements = requirements;
+		this.responsibilities = responsibilities;
+		this.location = location;
 		this.numOfApplicants = 0;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
@@ -109,5 +127,21 @@ public class Post implements Constants {
 
 	public void setIdsOfAppliedApplicants(List<String> idsOfAppliedApplicants) {
 		this.idsOfAppliedApplicants = idsOfAppliedApplicants;
+	}
+
+	public List<String> getRequirements() {
+		return requirements;
+	}
+
+	public void setRequirements(List<String> requirements) {
+		this.requirements = requirements;
+	}
+
+	public List<String> getResponsibilities() {
+		return responsibilities;
+	}
+
+	public void setResponsibilities(List<String> responsibilities) {
+		this.responsibilities = responsibilities;
 	}
 }
