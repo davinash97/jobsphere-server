@@ -1,0 +1,8 @@
+{
+	"java.compile.nullAnalysis.mode": "disabled",
+	"java.debug.settings.hotCodeReplace": "auto",
+	"java.autobuild.enabled": true,
+	"java.debug.settings.enableHotCodeReplace": true,
+	"java.debug.settings.enableRunDebugCodeLens": true,
+	"java.configuration.updateBuildConfiguration": "interactive"
+}
