@@ -13,6 +13,6 @@ import com.portal.jobsphere.model.Profile;
 
 @EnableJpaRepositories
 public interface ProfileRepository extends JpaRepository<Profile, UUID> {
-	@Query("SELECT p FROM Post p WHERE p.profileId = :profileId")
-	List<Post> getAllPostsByProfileId(@Param("profileId") UUID profileId);
+	@Query("SELECT p FROM Post p WHERE p.profile_id = :profile_id")
+	List<Post> getAllPostsByProfileId(@Param("profile_id") UUID profile_id);
 }

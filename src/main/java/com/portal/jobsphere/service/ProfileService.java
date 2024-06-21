@@ -17,17 +17,24 @@ import com.portal.jobsphere.repository.ProfileRepository;
 @Service
 public class ProfileService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
+	private static final Logger logger = LoggerFactory.getLogger(
+		ProfileService.class
+	);
 	Profile profile;
 
 	@Autowired
 	private ProfileRepository profileRepository;
 
-	public ProfileService() {
-	}
+	public ProfileService() {}
 
 	// CRUD Operations
-	public Profile createProfile(String name, String gender, String role, String email, Long phone) {
+	public Profile createProfile(
+		String name,
+		String gender,
+		String role,
+		String email,
+		Long phone
+	) {
 		Gender genderEnum = null;
 		Role roleEnum = null;
 		if (gender != null) {
@@ -47,17 +54,36 @@ public class ProfileService {
 		return profileRepository.findById(profileId).orElse(null);
 	}
 
-	public boolean updateProfile(UUID profileId, String name, String gender, String role, String email,
-			Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
-
+	public boolean updateProfile(
+		UUID profileId,
+		String name,
+		String first_name,
+		String last_name,
+		String gender,
+		String role,
+		String email,
+		Long phone,
+		Integer num_of_posts,
+		Long num_of_applicants,
+		String organization
+	) {
 		try {
 			Profile existingProfile = readProfile(profileId);
 
-			if(existingProfile == null)
+			if (existingProfile == null) {
 				return false;
+			}
 
 			if (name != null) {
 				existingProfile.setName(name);
+			}
+
+			if (first_name != null) {
+				existingProfile.setFirstName(first_name);
+			}
+
+			if (last_name != null) {
+				existingProfile.setLastName(last_name);
 			}
 
 			if (gender != null) {
@@ -78,16 +104,16 @@ public class ProfileService {
 				existingProfile.setPhone(phone);
 			}
 
-			if (numOfPosts != 0) {
-				existingProfile.setNumOfPosts(numOfPosts);
+			if (num_of_posts != 0) {
+				existingProfile.setNumOfPosts(num_of_posts);
 			}
 
-			if (numOfApplicants != 0) {
-				existingProfile.setNumOfApplicants(numOfApplicants);
+			if (num_of_applicants != 0) {
+				existingProfile.setNumOfApplicants(num_of_applicants);
 			}
 
-			if (organizationName != null) {
-				existingProfile.setOrganizationName(organizationName);
+			if (organization != null) {
+				existingProfile.setOrganizationName(organization);
 			}
 
 			profileRepository.save(existingProfile);
@@ -117,5 +143,4 @@ public class ProfileService {
 		}
 		return null;
 	}
-
 }

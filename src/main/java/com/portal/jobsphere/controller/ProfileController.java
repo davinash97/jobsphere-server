@@ -1,19 +1,24 @@
 package com.portal.jobsphere.controller;
 
-import com.portal.jobsphere.model.Profile;
-import com.portal.jobsphere.model.ResponseObject;
-import com.portal.jobsphere.service.ProfileService;
-import com.portal.jobsphere.utils.Constants;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
+import com.portal.jobsphere.model.Profile;
+import com.portal.jobsphere.model.ResponseObject;
+import com.portal.jobsphere.service.ProfileService;
+import com.portal.jobsphere.utils.Constants;
 
-@SuppressWarnings("ALL")
 @RestController
 public class ProfileController implements Constants {
 
@@ -77,22 +82,24 @@ public class ProfileController implements Constants {
 	public ResponseEntity<ResponseObject<?>> updateProfile(
 			@RequestParam UUID profileId,
 			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String first_name,
+			@RequestParam(required = false) String last_name,
 			@RequestParam(required = false) String role,
 			@RequestParam(required = false) String gender,
 			@RequestParam(required = false) String email,
 			@RequestParam(required = false) Long phone,
-			@RequestParam(required = false) Integer numOfPosts,
-			@RequestParam(required = false) Long numOfApplicants,
-			@RequestParam(required = false) String organizationName) {
+			@RequestParam(required = false) Integer num_of_Posts,
+			@RequestParam(required = false) Long num_of_applicants,
+			@RequestParam(required = false) String organization) {
 
 		try {
-			if (name == null && role == null && gender == null && email == null && organizationName == null) {
+			if (name == null && role == null && gender == null && email == null && organization == null) {
 				response = new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad",
 						"At least one of name, role, gender, email, or organization must be provided.");
 				return ResponseEntity.badRequest().body(response);
 			}
 
-			if (profileService.updateProfile(profileId, name, gender, role, email, phone, numOfPosts, numOfApplicants, organizationName)) {
+			if (profileService.updateProfile(profileId, name, first_name, last_name, gender, role, email, phone, num_of_Posts, num_of_applicants, organization)) {
 				logger.debug("Successfully profile updated for Id:\t{}", profileId);
 			}
 

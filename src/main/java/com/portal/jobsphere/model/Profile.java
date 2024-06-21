@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +23,8 @@ public class Profile {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID profileId;
 
+	private String first_name;
+	private String last_name;
 	private String name;
 	private Gender gender;
 	private Role role;
@@ -31,46 +32,51 @@ public class Profile {
 	private Long phone;
 
 	// Employee
-	@Column(name = "saved_jobs")
-	private Long savedJobs;
-
+	private Long saved_jobs;
 	private Integer experience;
-
-	@Column(name = "applied_jobs")
-	private Long appliedJobs;
-
+	private Long applied_jobs;
 	private String expertise;
 
 	// Employer
-	@Column(name = "all_posts")
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<UUID> allPosts;
+	private List<UUID> all_posts;
+	private Integer total_posts;
+	private Long total_applicants;
+	private String organization;
 
-	@Column(name = "total_posts")
-	private Integer numOfPosts;
-
-	@Column(name = "total_applicants")
-	private Long numOfApplicants;
-
-	@Column(name = "organization")
-	private String organizationName;
-
-	public Profile() {}
+	public Profile() {
+	}
 
 	// Common
 	public Profile(
-		String name,
-		Gender gender,
-		Role role,
-		String email,
-		Long phone
+			String name,
+			Gender gender,
+			Role role,
+			String email,
+			Long phone
 	) {
 		this.name = name;
 		this.gender = gender;
 		this.role = role;
 		this.email = email;
 		this.phone = phone;
-		this.numOfPosts = 0;
+		this.total_posts = 0;
+	}
+
+	public String getFirstName() {
+		return first_name;
+	}
+
+	public void setFirstName(String first_name) {
+		this.first_name = first_name;
+	}
+
+	public String getLastName() {
+		return last_name;
+	}
+
+	public void setLastName(String last_name) {
+		this.last_name = last_name;
 	}
 
 	public UUID getProfileId() {
@@ -118,11 +124,11 @@ public class Profile {
 	}
 
 	public Long getSavedJobs() {
-		return savedJobs;
+		return saved_jobs;
 	}
 
 	public void setSavedJobs(Long savedJobs) {
-		this.savedJobs = savedJobs;
+		this.saved_jobs = savedJobs;
 	}
 
 	public Integer getExperience() {
@@ -134,11 +140,11 @@ public class Profile {
 	}
 
 	public Long getAppliedJobs() {
-		return appliedJobs;
+		return applied_jobs;
 	}
 
-	public void setAppliedJobs(Long appliedJobs) {
-		this.appliedJobs = appliedJobs;
+	public void setAppliedJobs(Long applied_jobs) {
+		this.applied_jobs = applied_jobs;
 	}
 
 	public String getExpertise() {
@@ -150,30 +156,30 @@ public class Profile {
 	}
 
 	public Integer getNumOfPosts() {
-		return numOfPosts;
+		return total_posts;
 	}
 
-	public void setNumOfPosts(Integer numOfPosts) {
-		this.numOfPosts = numOfPosts;
+	public void setNumOfPosts(Integer total_posts) {
+		this.total_posts = total_posts;
 	}
 
 	public Long getNumOfApplicants() {
-		return numOfApplicants;
+		return total_applicants;
 	}
 
-	public void setNumOfApplicants(Long numOfApplicants) {
-		this.numOfApplicants = numOfApplicants;
+	public void setNumOfApplicants(Long total_applicants) {
+		this.total_applicants = total_applicants;
 	}
 
-	public String getOrganizationName() {
-		return organizationName;
+	public String getOrganization() {
+		return organization;
 	}
 
-	public void setOrganizationName(String organizationName) {
-		this.organizationName = organizationName;
+	public void setOrganizationName(String organization) {
+		this.organization = organization;
 	}
 
 	public List<UUID> getAllPosts() {
-		return allPosts;
+		return all_posts;
 	}
 }

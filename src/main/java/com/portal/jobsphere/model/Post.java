@@ -24,72 +24,62 @@ import jakarta.persistence.Table;
 public class Post implements Constants {
 
 	@Column(nullable = false)
-	private UUID profileId;
+	private UUID profile_id;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID postId;
+	private UUID post_id;
 
-	@Column(nullable = false)
 	private String title;
-
-	@Column(nullable = false)
 	private String location;
-
-	@Column(nullable = false)
 	private String description;
 
-	@Column
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> requirements;
 
-	@Column
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> responsibilities;
 
-	@Column(name = "num_of_applicants")
-	private Integer numOfApplicants;
+	private Integer num_of_applicants;
 
 	@CreatedDate
-	@Column(name = "created_at", nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime created_at;
 
 	@LastModifiedDate
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
+	private LocalDateTime updated_at;
 
-	@Column(name = "total_applicants", nullable = false)
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<UUID> idsOfAppliedApplicants;
+	private List<UUID> ids_of_applicants;
 
 	public Post() {}
 
 	public Post(
-		UUID profileId,
+		UUID profile_id,
 		String title,
 		String description,
 		List<String> requirements,
 		List<String> responsibilities,
 		String location
 	) {
-		this.profileId = profileId;
+		this.profile_id = profile_id;
 		this.title = title;
 		this.description = description;
 		this.requirements = requirements;
 		this.responsibilities = responsibilities;
 		this.location = location;
-		this.numOfApplicants = 0;
-		this.createdAt = LocalDateTime.now();
-		this.updatedAt = LocalDateTime.now();
-		this.idsOfAppliedApplicants = new ArrayList<>();
+		this.num_of_applicants = 0;
+		this.created_at = LocalDateTime.now();
+		this.updated_at = LocalDateTime.now();
+		this.ids_of_applicants = new ArrayList<>();
 	}
 
 	public UUID getProfileId() {
-		return profileId;
+		return profile_id;
 	}
 
 	public UUID getPostId() {
-		return postId;
+		return post_id;
 	}
 
 	public String getTitle() {
@@ -117,31 +107,31 @@ public class Post implements Constants {
 	}
 
 	public String getCreatedAt() {
-		return createdAt.format(formatter);
+		return created_at.format(formatter);
 	}
 
 	public String getUpdatedAt() {
-		return updatedAt.format(formatter);
+		return updated_at.format(formatter);
 	}
 
 	public void setUpdatedAt() {
-		updatedAt = LocalDateTime.now();
+		updated_at = LocalDateTime.now();
 	}
 
 	public Integer getNumOfApplicants() {
-		return numOfApplicants;
+		return num_of_applicants;
 	}
 
-	public void setNumOfApplicants(Integer numOfApplicants) {
-		this.numOfApplicants = numOfApplicants;
+	public void setNumOfApplicants(Integer num_of_applicants) {
+		this.num_of_applicants = num_of_applicants;
 	}
 
 	public List<UUID> getIdsOfAppliedApplicants() {
-		return idsOfAppliedApplicants;
+		return ids_of_applicants;
 	}
 
-	public void setIdsOfAppliedApplicants(List<UUID> idsOfAppliedApplicants) {
-		this.idsOfAppliedApplicants = idsOfAppliedApplicants;
+	public void setIdsOfAppliedApplicants(List<UUID> ids_of_applicants) {
+		this.ids_of_applicants = ids_of_applicants;
 	}
 
 	public List<String> getRequirements() {
