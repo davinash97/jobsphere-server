@@ -20,12 +20,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="post")
+@Table(name = "post")
 public class Post implements Constants {
 
 	@Column(nullable = false)
 	private UUID profileId;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID postId;
@@ -55,17 +55,23 @@ public class Post implements Constants {
 	private LocalDateTime createdAt;
 
 	@LastModifiedDate
-	@Column(name="updated_at")
+	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
 	@Column(name = "total_applicants", nullable = false)
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<String> idsOfAppliedApplicants;
+	private List<UUID> idsOfAppliedApplicants;
 
-	public Post() {
-	}
+	public Post() {}
 
-	public Post(UUID profileId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
+	public Post(
+		UUID profileId,
+		String title,
+		String description,
+		List<String> requirements,
+		List<String> responsibilities,
+		String location
+	) {
 		this.profileId = profileId;
 		this.title = title;
 		this.description = description;
@@ -81,7 +87,7 @@ public class Post implements Constants {
 	public UUID getProfileId() {
 		return profileId;
 	}
-	
+
 	public UUID getPostId() {
 		return postId;
 	}
@@ -130,11 +136,11 @@ public class Post implements Constants {
 		this.numOfApplicants = numOfApplicants;
 	}
 
-	public List<String> getIdsOfAppliedApplicants() {
+	public List<UUID> getIdsOfAppliedApplicants() {
 		return idsOfAppliedApplicants;
 	}
 
-	public void setIdsOfAppliedApplicants(List<String> idsOfAppliedApplicants) {
+	public void setIdsOfAppliedApplicants(List<UUID> idsOfAppliedApplicants) {
 		this.idsOfAppliedApplicants = idsOfAppliedApplicants;
 	}
 

@@ -50,9 +50,13 @@ public class PostService {
 		return (Post) postRepository.findById(postId).orElse(null);
 	}
 
-	public boolean updatePost(UUID postId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
+	public boolean updatePost(UUID profileId, UUID postId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 
 		try {
+			if (profileService.profileIdExists(profileId)) {
+				return false;
+			}
+
 			Post existingPost = postRepository.findById(postId).orElse(null);
 
 			if (existingPost == null) {
@@ -88,11 +92,23 @@ public class PostService {
 		}
 	}
 
-	public boolean deletePost(UUID postId) {
-		if (!postRepository.existsById(postId)) {
-			return false;
+	public boolean deletePost(UUID profileId, UUID postId) {
+		if (postIdExists(profileId, postId)) {
+			postRepository.deleteById(postId);
+			return true;
 		}
-		postRepository.deleteById(postId);
-		return true;
+		return false;
+	}
+
+	// Others
+	public List<Post> fetchAll() {
+		return postRepository.findAll();
+	}
+	
+	public boolean postIdExists(UUID profileId, UUID postId) {
+		if (profileService.profileIdExists(profileId)) {
+			return postRepository.existsById(postId);
+		}
+		return false;
 	}
 }

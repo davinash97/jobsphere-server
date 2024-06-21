@@ -16,13 +16,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="profile")
+@Table(name = "profile")
 public class Profile {
 
 	// Common
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID profileId;
+
 	private String name;
 	private Gender gender;
 	private Role role;
@@ -32,6 +33,7 @@ public class Profile {
 	// Employee
 	@Column(name = "saved_jobs")
 	private Long savedJobs;
+
 	private Integer experience;
 
 	@Column(name = "applied_jobs")
@@ -43,7 +45,7 @@ public class Profile {
 	@Column(name = "all_posts")
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<UUID> allPosts;
-	
+
 	@Column(name = "total_posts")
 	private Integer numOfPosts;
 
@@ -53,11 +55,16 @@ public class Profile {
 	@Column(name = "organization")
 	private String organizationName;
 
-
 	public Profile() {}
-	
+
 	// Common
-	public Profile(String name, Gender gender, Role role, String email, Long phone) {
+	public Profile(
+		String name,
+		Gender gender,
+		Role role,
+		String email,
+		Long phone
+	) {
 		this.name = name;
 		this.gender = gender;
 		this.role = role;
@@ -169,5 +176,4 @@ public class Profile {
 	public List<UUID> getAllPosts() {
 		return allPosts;
 	}
-
 }

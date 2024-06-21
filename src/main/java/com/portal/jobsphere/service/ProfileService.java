@@ -1,5 +1,6 @@
 package com.portal.jobsphere.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
+import com.portal.jobsphere.model.Post;
 import com.portal.jobsphere.model.Profile;
 import com.portal.jobsphere.repository.ProfileRepository;
 
@@ -24,16 +26,17 @@ public class ProfileService {
 	public ProfileService() {
 	}
 
-
 	// CRUD Operations
 	public Profile createProfile(String name, String gender, String role, String email, Long phone) {
 		Gender genderEnum = null;
 		Role roleEnum = null;
-		if(gender != null)
+		if (gender != null) {
 			genderEnum = Gender.valueOf(gender.toUpperCase());
-		
-		if(role != null)
+		}
+
+		if (role != null) {
 			roleEnum = Role.valueOf(role.toUpperCase());
+		}
 
 		profile = new Profile(name, genderEnum, roleEnum, email, phone);
 		profileRepository.save(profile);
@@ -45,13 +48,17 @@ public class ProfileService {
 	}
 
 	public boolean updateProfile(UUID profileId, String name, String gender, String role, String email,
-								 Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
+			Long phone, Integer numOfPosts, Long numOfApplicants, String organizationName) {
 
 		try {
 			Profile existingProfile = readProfile(profileId);
 
-			if (name != null)
+			if(existingProfile == null)
+				return false;
+
+			if (name != null) {
 				existingProfile.setName(name);
+			}
 
 			if (gender != null) {
 				Gender genderEnum = Gender.valueOf(gender.toUpperCase());
@@ -63,20 +70,25 @@ public class ProfileService {
 				existingProfile.setRole(roleEnum);
 			}
 
-			if (email != null)
+			if (email != null) {
 				existingProfile.setEmail(email);
+			}
 
-			if (phone != 0)
+			if (phone != 0) {
 				existingProfile.setPhone(phone);
+			}
 
-			if (numOfPosts != 0)
+			if (numOfPosts != 0) {
 				existingProfile.setNumOfPosts(numOfPosts);
+			}
 
-			if (numOfApplicants != 0)
+			if (numOfApplicants != 0) {
 				existingProfile.setNumOfApplicants(numOfApplicants);
+			}
 
-			if (organizationName != null)
+			if (organizationName != null) {
 				existingProfile.setOrganizationName(organizationName);
+			}
 
 			profileRepository.save(existingProfile);
 			return true;
@@ -87,15 +99,23 @@ public class ProfileService {
 	}
 
 	public boolean deleteProfile(UUID profileId) {
-		if (!profileRepository.existsById(profileId))
-			return false;
-		profileRepository.deleteById(profileId);
-		return true;
+		if (profileIdExists(profileId)) {
+			profileRepository.deleteById(profileId);
+			return true;
+		}
+		return false;
 	}
 
 	// Others
 	public boolean profileIdExists(UUID profileId) {
 		return profileRepository.existsById(profileId);
+	}
+
+	public List<Post> getAllPosts(UUID profileId) {
+		if (profileIdExists(profileId)) {
+			return profileRepository.getAllPostsByProfileId(profileId);
+		}
+		return null;
 	}
 
 }
