@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.portal.jobsphere.exception.NotFound;
 import com.portal.jobsphere.model.Profile;
 import com.portal.jobsphere.model.ResponseObject;
 import com.portal.jobsphere.service.ProfileService;
@@ -27,6 +28,8 @@ public class ProfileController implements Constants {
 	@Autowired
 	private ProfileService profileService;
 
+	private final NotFound notFound = new NotFound();
+	
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_PROFILE_URI + "/create")
@@ -66,7 +69,7 @@ public class ProfileController implements Constants {
 
 			Profile result = profileService.readProfile(profileId);
 			response = (result == null)
-					? new ResponseObject<>(HttpStatus.BAD_REQUEST.value(), "bad", "id doesn't exist")
+					? notFound.profile(profileId)
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
 			logger.debug(response.toString());
 			return ResponseEntity.ok(response);

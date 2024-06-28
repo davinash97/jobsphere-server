@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.portal.jobsphere.exception.Exception;
+import com.portal.jobsphere.exception.NotFound;
 import com.portal.jobsphere.model.Post;
 import com.portal.jobsphere.model.ResponseObject;
 import com.portal.jobsphere.service.PostService;
@@ -32,6 +32,8 @@ public class PostController implements Constants {
 	@Autowired
 	private PostService postService;
 
+	private final NotFound notFound = new NotFound();
+	
 	private ResponseObject<?> response;
 
 	@PostMapping(DEFAULT_POST_URI + "/{profileId}" + "/create")
@@ -65,12 +67,7 @@ public class PostController implements Constants {
 				return readPost(post.getPostId());
 			}
 
-			response = new ResponseObject<>(
-					HttpStatus.BAD_REQUEST.value(),
-					"bad",
-					"either that profile Id is invalid, or doesn't exist."
-			);
-			return ResponseEntity.badRequest().body(response);
+			return ResponseEntity.badRequest().body(notFound.profile(profileId));
 		} catch (Exception e) {
 			response = new ResponseObject<>(
 					HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -96,11 +93,7 @@ public class PostController implements Constants {
 
 			Post result = postService.readPost(postId);
 			response = (result == null)
-					? new ResponseObject<>(
-							HttpStatus.NOT_FOUND.value(),
-							"bad",
-							"id doesn't exist"
-					)
+					? notFound.post(postId)
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
 
 			logger.debug(response.toString());
@@ -178,7 +171,7 @@ public class PostController implements Constants {
 		try {
 			response = (postService.deletePost(profileId, postId))
 					? new ResponseObject<>(HttpStatus.OK.value(), "ok")
-					: Exception.notFoundException(postId, "post");
+					: notFound.post(postId);
 			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
@@ -196,6 +189,7 @@ public class PostController implements Constants {
 	@GetMapping(DEFAULT_POST_URI + "/all")
 	public ResponseEntity<ResponseObject<?>> getAllPosts() {
 		response = new ResponseObject<>(HttpStatus.OK.value(), "ok", postService.fetchAll());
+
 		return ResponseEntity.ok(response);
 	}
 

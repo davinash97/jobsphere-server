@@ -1,4 +1,4 @@
-package com.portal.jobsphere.utils;
+package com.portal.jobsphere.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
