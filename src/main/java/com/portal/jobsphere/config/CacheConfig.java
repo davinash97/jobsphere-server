@@ -12,14 +12,14 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 public class CacheConfig {
 
 	@Bean
-	CaffeineCacheManager cacheManager() {
+	public CaffeineCacheManager cacheManager() {
 		CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 		cacheManager.setCaffeine(caffeineCacheBuilder());
 		return cacheManager;
 	}
 
 	@Bean
-	Caffeine<Object, Object> caffeineCacheBuilder() {
+	public Caffeine<Object, Object> caffeineCacheBuilder() {
 		return Caffeine.newBuilder()
 				.initialCapacity(100)
 				.maximumSize(500)

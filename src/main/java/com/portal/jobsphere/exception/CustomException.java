@@ -6,13 +6,9 @@ import org.springframework.http.HttpStatus;
 
 import com.portal.jobsphere.model.ResponseObject;
 
-public class NotFound extends RuntimeException {
+public class CustomException extends RuntimeException {
 
-	public ResponseObject<?> profile(UUID id) {
-		return new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "not found", "invalid id");
-	}
-
-	public ResponseObject<?> post(UUID id) {
+	public ResponseObject<?> notFound(UUID id) {
 		return new ResponseObject<>(HttpStatus.NOT_FOUND.value(), "not found", "invalid id");
 	}
 }

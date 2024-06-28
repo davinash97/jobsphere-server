@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.portal.jobsphere.exception.NotFound;
+import com.portal.jobsphere.exception.CustomException;
 import com.portal.jobsphere.model.Profile;
 import com.portal.jobsphere.model.ResponseObject;
 import com.portal.jobsphere.service.ProfileService;
@@ -28,7 +28,7 @@ public class ProfileController implements Constants {
 	@Autowired
 	private ProfileService profileService;
 
-	private final NotFound notFound = new NotFound();
+	private final CustomException exception = new CustomException();
 	
 	private ResponseObject<?> response;
 
@@ -69,7 +69,7 @@ public class ProfileController implements Constants {
 
 			Profile result = profileService.readProfile(profileId);
 			response = (result == null)
-					? notFound.profile(profileId)
+					? exception.notFound(profileId)
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
 			logger.debug(response.toString());
 			return ResponseEntity.ok(response);

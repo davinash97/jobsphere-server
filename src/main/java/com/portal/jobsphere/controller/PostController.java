@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.portal.jobsphere.exception.NotFound;
+import com.portal.jobsphere.exception.CustomException;
 import com.portal.jobsphere.model.Post;
 import com.portal.jobsphere.model.ResponseObject;
 import com.portal.jobsphere.service.PostService;
@@ -32,7 +32,7 @@ public class PostController implements Constants {
 	@Autowired
 	private PostService postService;
 
-	private final NotFound notFound = new NotFound();
+	private final CustomException exception = new CustomException();
 	
 	private ResponseObject<?> response;
 
@@ -67,7 +67,7 @@ public class PostController implements Constants {
 				return readPost(post.getPostId());
 			}
 
-			return ResponseEntity.badRequest().body(notFound.profile(profileId));
+			return ResponseEntity.badRequest().body(exception.notFound(profileId));
 		} catch (Exception e) {
 			response = new ResponseObject<>(
 					HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -93,7 +93,7 @@ public class PostController implements Constants {
 
 			Post result = postService.readPost(postId);
 			response = (result == null)
-					? notFound.post(postId)
+					? exception.notFound(postId)
 					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
 
 			logger.debug(response.toString());
@@ -171,7 +171,7 @@ public class PostController implements Constants {
 		try {
 			response = (postService.deletePost(profileId, postId))
 					? new ResponseObject<>(HttpStatus.OK.value(), "ok")
-					: notFound.post(postId);
+					: exception.notFound(postId);
 			logger.debug(response.toString());
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
