@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
+import com.portal.jobsphere.model.Message;
 import com.portal.jobsphere.model.Post;
 import com.portal.jobsphere.model.Profile;
 import com.portal.jobsphere.repository.ProfileRepository;
@@ -50,12 +51,12 @@ public class ProfileService {
 		return readProfile(profile.getProfileId());
 	}
 
-	public Profile readProfile(UUID profileId) {
-		return profileRepository.findById(profileId).orElse(null);
+	public Profile readProfile(UUID profile_id) {
+		return profileRepository.findById(profile_id).orElse(null);
 	}
 
 	public boolean updateProfile(
-		UUID profileId,
+		UUID profile_id,
 		String name,
 		String first_name,
 		String last_name,
@@ -68,7 +69,7 @@ public class ProfileService {
 		String organization
 	) {
 		try {
-			Profile existingProfile = readProfile(profileId);
+			Profile existingProfile = readProfile(profile_id);
 
 			if (existingProfile == null) {
 				return false;
@@ -124,22 +125,29 @@ public class ProfileService {
 		}
 	}
 
-	public boolean deleteProfile(UUID profileId) {
-		if (profileIdExists(profileId)) {
-			profileRepository.deleteById(profileId);
+	public boolean deleteProfile(UUID profile_id) {
+		if (profileIdExists(profile_id)) {
+			profileRepository.deleteById(profile_id);
 			return true;
 		}
 		return false;
 	}
 
 	// Others
-	public boolean profileIdExists(UUID profileId) {
-		return profileRepository.existsById(profileId);
+	public boolean profileIdExists(UUID profile_id) {
+		return profileRepository.existsById(profile_id);
 	}
 
-	public List<Post> getAllPosts(UUID profileId) {
-		if (profileIdExists(profileId)) {
-			return profileRepository.getAllPostsByProfileId(profileId);
+	public List<Post> getAllPosts(UUID profile_id) {
+		if (profileIdExists(profile_id)) {
+			return profileRepository.getAllPostsByProfileId(profile_id);
+		}
+		return null;
+	}
+
+	public List<Message> getAllMessages(UUID profile_id) {
+		if (profileIdExists(profile_id)) {
+			return profileRepository.getAllMessagesByProfileId(profile_id);
 		}
 		return null;
 	}
