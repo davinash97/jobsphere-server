@@ -18,7 +18,7 @@ public class ResponseObject<T> {
 
 	public ResponseObject(int code, String status, T result) {
 		this.code = code;
-		this.result = result;
 		this.status = status;
+		this.result = result;
 	}
 }

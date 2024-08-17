@@ -35,8 +35,8 @@ public class PostController implements Constants {
 	private final CustomException exception = new CustomException();
 	
 	private ResponseObject<?> response;
-
-	@PostMapping(DEFAULT_POST_URI + "/{profileId}" + "/create")
+	
+	@PostMapping(DEFAULT_POST_URI + "/{profileId}")
 	public ResponseEntity<ResponseObject<?>> createPost(
 			@PathVariable UUID profileId,
 			@RequestParam String title,
@@ -79,7 +79,7 @@ public class PostController implements Constants {
 		}
 	}
 
-	@GetMapping(DEFAULT_POST_URI + "/read")
+	@GetMapping(DEFAULT_POST_URI)
 	public ResponseEntity<ResponseObject<?>> readPost(UUID postId) {
 		try {
 			if (postId.toString().length() != 36) {
@@ -109,7 +109,7 @@ public class PostController implements Constants {
 		}
 	}
 
-	@PutMapping(DEFAULT_POST_URI + "/{profileId}" + "/update")
+	@PutMapping(DEFAULT_POST_URI + "/{profileId}")
 	public ResponseEntity<ResponseObject<?>> updatePost(
 			@PathVariable UUID profileId,
 			@RequestParam UUID postId,
@@ -128,7 +128,7 @@ public class PostController implements Constants {
 				response = new ResponseObject<>(
 						HttpStatus.BAD_REQUEST.value(),
 						"bad",
-						"At least one of title, description, requirementes, responsibilities or location must be provided."
+						"At least one of title, description, requirements, responsibilities or location must be provided."
 				);
 				return ResponseEntity.badRequest().body(response);
 			}
@@ -163,7 +163,7 @@ public class PostController implements Constants {
 		}
 	}
 
-	@DeleteMapping(DEFAULT_POST_URI + "/{profileId}" + "/delete")
+	@DeleteMapping(DEFAULT_POST_URI + "/{profileId}")
 	public ResponseEntity<ResponseObject<?>> deletePost(
 			@PathVariable UUID profileId,
 			@RequestParam UUID postId
@@ -186,7 +186,7 @@ public class PostController implements Constants {
 	}
 
 	// Other
-	@GetMapping(DEFAULT_POST_URI + "/all")
+	@GetMapping(DEFAULT_POST_URI)
 	public ResponseEntity<ResponseObject<?>> getAllPosts() {
 		response = new ResponseObject<>(HttpStatus.OK.value(), "ok", postService.fetchAll());
 
