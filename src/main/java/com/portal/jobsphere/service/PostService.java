@@ -3,6 +3,7 @@ package com.portal.jobsphere.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.portal.jobsphere.repository.ProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,12 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 
+	@Autowired
+	private ProfileRepository profileRepository;
+
+//
+//	CREATE
+//
 	public Post createPost(UUID profileId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 
 		try {
@@ -46,11 +53,26 @@ public class PostService {
 			return null;
 		}
 	}
+//
+//	READ
+//
 
+//	By Post ID
 	public Post readPost(UUID postId) {
 		return (Post) postRepository.findById(postId).orElse(null);
 	}
 
+//	By Profile ID
+	public List<Post> getAllPostsByProfileId(UUID profile_id) {
+		if (profileService.profileIdExists(profile_id)) {
+			return profileRepository.getAllPostsByProfileId(profile_id);
+		}
+		return null;
+	}
+
+//
+//	UPDATE
+//
 	public boolean updatePost(UUID profileId, UUID postId, String title, String description, List<String> requirements, List<String> responsibilities, String location) {
 
 		try {

@@ -3,6 +3,7 @@ package com.portal.jobsphere.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.portal.jobsphere.service.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,16 @@ public class PostController implements Constants {
 	@Autowired
 	private PostService postService;
 
+	@Autowired
+	private ProfileService profileService;
+
 	private final CustomException exception = new CustomException();
 	
 	private ResponseObject<?> response;
-	
+
+//
+// CREATE
+//
 	@PostMapping(DEFAULT_POST_URI + "/{profileId}")
 	public ResponseEntity<ResponseObject<?>> createPost(
 			@PathVariable UUID profileId,
@@ -79,7 +86,31 @@ public class PostController implements Constants {
 		}
 	}
 
-	@GetMapping(DEFAULT_POST_URI)
+//
+//	READ
+//
+	@GetMapping("/v1/profile" + "/{profileId}" + "/post")
+	public ResponseEntity<ResponseObject<?>> readPostWithProfileId(@PathVariable UUID profileId) {
+		try {
+			List<Post> result = postService.getAllPostsByProfileId(profileId);
+			response = (result == null)
+					? exception.notFound(profileId)
+					: new ResponseObject<>(HttpStatus.OK.value(), "ok", result);
+			if(result == null) {
+				return ResponseEntity.badRequest().body(response);
+			}
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response = new ResponseObject<>(
+					HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					"bad",
+					"internal error occurred"
+			);
+			logger.error(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
 	public ResponseEntity<ResponseObject<?>> readPost(UUID postId) {
 		try {
 			if (postId.toString().length() != 36) {
@@ -109,6 +140,9 @@ public class PostController implements Constants {
 		}
 	}
 
+//
+//	UPDATE
+//
 	@PutMapping(DEFAULT_POST_URI + "/{profileId}")
 	public ResponseEntity<ResponseObject<?>> updatePost(
 			@PathVariable UUID profileId,
@@ -163,6 +197,9 @@ public class PostController implements Constants {
 		}
 	}
 
+//
+// DELETE
+//
 	@DeleteMapping(DEFAULT_POST_URI + "/{profileId}")
 	public ResponseEntity<ResponseObject<?>> deletePost(
 			@PathVariable UUID profileId,

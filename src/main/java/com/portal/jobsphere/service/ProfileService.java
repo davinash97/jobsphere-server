@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.portal.jobsphere.enums.Gender;
 import com.portal.jobsphere.enums.Role;
 import com.portal.jobsphere.model.Message;
-import com.portal.jobsphere.model.Post;
 import com.portal.jobsphere.model.Profile;
 import com.portal.jobsphere.repository.ProfileRepository;
 
@@ -136,13 +135,6 @@ public class ProfileService {
 	// Others
 	public boolean profileIdExists(UUID profile_id) {
 		return profileRepository.existsById(profile_id);
-	}
-
-	public List<Post> getAllPosts(UUID profile_id) {
-		if (profileIdExists(profile_id)) {
-			return profileRepository.getAllPostsByProfileId(profile_id);
-		}
-		return null;
 	}
 
 	public List<Message> getAllMessages(UUID profile_id) {
