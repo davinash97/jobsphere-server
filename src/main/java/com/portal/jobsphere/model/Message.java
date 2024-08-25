@@ -27,7 +27,7 @@ public class Message implements Constants {
 	private final UUID sender;
 
 	@Column(nullable = false)
-	private final UUID reciever;
+	private final UUID receiver;
 
 	@Column(nullable = false)
 	private Boolean is_read;
@@ -39,10 +39,10 @@ public class Message implements Constants {
 
 	private final String content;
 
-	public Message(UUID sender, UUID reciever, String content) {
+	public Message(UUID sender, UUID receiver, String content) {
 		messageId = UUID.randomUUID();
 		this.sender = sender;
-		this.reciever = reciever;
+		this.receiver = receiver;
 		this.content = content;
 		is_read = false;
 		is_delivered = false;
@@ -57,8 +57,8 @@ public class Message implements Constants {
 		return sender;
 	}
 
-	public UUID getReciever() {
-		return reciever;
+	public UUID getReceiver() {
+		return receiver;
 	}
 
 	public String getTime() {

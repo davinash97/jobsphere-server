@@ -26,20 +26,20 @@ public class MessageService {
 		return messageRepository.existsById(messageId);
 	}
 
-	public boolean createMessage(UUID sender, UUID reciever, String content) {
+	public boolean createMessage(UUID sender, UUID receiver, String content) {
 		try {
-			if(sender.toString().isEmpty() || reciever.toString().isEmpty() || content.isEmpty()) {
+			if(sender.toString().isEmpty() || receiver.toString().isEmpty() || content.isEmpty()) {
 				return false;
 			}
 			
-			if(profileService.profileIdExists(sender) && profileService.profileIdExists(reciever)) {
-				Message message = new Message(sender, reciever, content);
+			if(profileService.profileIdExists(sender) && profileService.profileIdExists(receiver)) {
+				Message message = new Message(sender, receiver, content);
 				messageRepository.save(message);
 				return true;
 			}
 			return false;
 		} catch (Exception e) {
-			logger.error("Error occured at {}", e.getMessage());
+			logger.error("Error occurred at {}", e.getMessage());
 			return false;
 		}
 	}
@@ -60,7 +60,7 @@ public class MessageService {
 			}
 			return false;
 		} catch (Exception e) {
-			logger.error("Error occured at {}", e.getMessage());
+			logger.error("Error occurred at {}", e.getMessage());
 			return false;
 		}
 	}

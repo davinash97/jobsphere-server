@@ -57,15 +57,15 @@ and employers to connect effectively.
    ```
 2. **Configure Environment Variables:**
 
-   Copy the config.env to .env and set your environment variables.
+   Copy the `config.env` to `.env` and set your environment variables.
 
 
-3. **Build and Run the Application**
+1. **Build and Run the Application**
 
    `mvn spring-boot:run`
 
 
-4. **Run with Docker**
+1. **Run with Docker**
 
     docker-compose up
 
@@ -74,14 +74,14 @@ and employers to connect effectively.
 ### Profile
 | Method | Endpoint  |         Detail          |
 |:------:|:---------:|:-----------------------:|
-|  POST  | /profile  | Create a new profile    |
+|  POST  | /profile  |  Create a new profile   |
 
 ### Profile with {profileId}
 | Method |        Endpoint         |          Detail           |
 |:------:|:-----------------------:|:-------------------------:|
-|  GET   | /profile/{profileId}    | Retrieve profile details  |
-|  PUT   | /profile/{profileId}    | Update existing profile   |
-| DELETE | /profile/{profileId}    | Delete a profile          |
+|  GET   |  /profile/{profileId}   | Retrieve profile details  |
+|  PUT   |  /profile/{profileId}   |  Update existing profile  |
+| DELETE |  /profile/{profileId}   |     Delete a profile      |
 
 ### Post
 | Method | Endpoint |       Detail        |
@@ -89,16 +89,16 @@ and employers to connect effectively.
 |  GET   |  /post   | Retrieve all posts  |
 
 ### User-specific posts for {profileId}
-| Method |         Endpoint           |             Detail             |
+| Method |          Endpoint          |             Detail             |
 |:------:|:--------------------------:|:------------------------------:|
-|  GET   | /profile/{profileId}/post  | Get all posts for a profile    |
+|  GET   | /profile/{profileId}/post  |  Get all posts for a profile   |
 |  POST  | /profile/{profileId}/post  | Create a new post for profile  |
 
 ### Specific post actions for {profileId} and {postId}
 | Method |              Endpoint               |                 Detail                 |
 |:------:|:-----------------------------------:|:--------------------------------------:|
-|  PUT   | /profile/{profileId}/post/{postId}  | Update a specific post for a profile   |
-| DELETE | /profile/{profileId}/post/{postId}  | Delete a specific post for a profile   |
+|  PUT   | /profile/{profileId}/post/{postId}  |  Update a specific post for a profile  |
+| DELETE | /profile/{profileId}/post/{postId}  |  Delete a specific post for a profile  |
 
 # Application Structure
 ```
